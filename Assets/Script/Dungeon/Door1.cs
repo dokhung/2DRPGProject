@@ -1,0 +1,46 @@
+using System.Collections;
+using UnityEngine;
+
+public class Door1 : MonoBehaviour
+{
+    private float targetPosition = 0;
+    private float speed = 2f;
+    private bool isMoving = false;
+    public Transform InitPoint;
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (!isMoving)
+            {
+                isMoving = true;
+                StartCoroutine(Init());
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (isMoving)
+        {
+            targetPosition += speed * Time.deltaTime;
+            transform.Translate(0, speed * Time.deltaTime, 0);
+            if (targetPosition >= 2.1f)
+            {
+                isMoving = false;
+            }
+        }
+    }
+
+    IEnumerator Init()
+    {
+        yield return new WaitForSeconds(3f);
+        transform.position = InitPoint.position;
+        targetPosition = 0; 
+        isMoving = false;
+    }
+}
+
+
+

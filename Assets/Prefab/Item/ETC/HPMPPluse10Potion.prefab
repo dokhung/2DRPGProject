@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7735923311843821930}
   - component: {fileID: 7735923311843821931}
-  - component: {fileID: 5284301998097750252}
+  - component: {fileID: 6056238193527776493}
   - component: {fileID: 405313124808101419}
   - component: {fileID: 6804949895911912721}
   m_Layer: 8
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5284301998097750252
+--- !u!114 &6056238193527776493
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,15 +96,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7735923311843821924}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af626293ae78ed54c953a190e1317c5e, type: 3}
+  m_Script: {fileID: 11500000, guid: e12a73893aa66d442baa46a488cb0aa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Count: 0
-  ItemImage: {fileID: 21300000, guid: ab7b4f72dc459284d965e73299cf0d77, type: 3}
-  itemType: 2
-  potionItemList: 4
-  potionType: 2
-  potionNumber: 0
+  sr: {fileID: 7735923311843821931}
 --- !u!61 &405313124808101419
 BoxCollider2D:
   m_ObjectHideFlags: 0

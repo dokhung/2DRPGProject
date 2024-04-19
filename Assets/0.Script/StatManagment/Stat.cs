@@ -30,6 +30,4 @@ public class Stat
          this.Def = DEF;
       }
    }
-   
-   
 }

@@ -19,25 +19,11 @@ public class AllEnum : MonoBehaviour
         None
     }
 
-
-    public enum PotionItemList
-    {
-        HPPlus10,
-        HPPlus100,
-        MP10,
-        MP100,
-        HPMPPlus10,
-        HPMPPlus100,
-        
-        None
-       
-    }
-
     public enum PotionType
     {
         HP,
         MP,
-        HPMP,
+        ALL,
         None
     }
     

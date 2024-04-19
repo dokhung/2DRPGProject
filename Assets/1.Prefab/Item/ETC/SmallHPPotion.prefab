@@ -101,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sr: {fileID: 9203171725828614588}
   itemType: 2
+  potionType: 0
+  addValue: 10
 --- !u!61 &9203171725828614585
 BoxCollider2D:
   m_ObjectHideFlags: 0

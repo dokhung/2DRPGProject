@@ -5,13 +5,13 @@ using UnityEngine;
 public class Inventory : Singleton<Inventory>
 {
     [SerializeField] private Transform itemParent;
-    private List<Item> items = new List<Item>();
+    private List<Slot> items = new List<Slot>();
     // Start is called before the first frame update
     void Start()
     {
         for (int i = 0; i < itemParent.childCount; i++)
         {
-            items.Add(itemParent.GetChild(0).GetComponent<Item>());
+            items.Add(itemParent.GetChild(i).GetComponent<Slot>());
         }
     }
 
@@ -41,9 +41,7 @@ public class Inventory : Singleton<Inventory>
             {
                 if (items[i].Sprite == null)
                 {
-                    items[i].Sprite = dropItem.Sprite;
-                    items[i].Type = dropItem.itemType;
-                    items[i].Count++;
+                    items[i].SetDropItem(dropItem);
                     break;
                 }
             }

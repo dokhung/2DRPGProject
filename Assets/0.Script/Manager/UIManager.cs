@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,9 +68,39 @@ public class UIManager : Singleton<UIManager>
             UpdateUI();
         }
     }
-    
-    
-    
+
+    #region 새로운 코드
+    [System.Serializable]
+    public class PlayerInfo
+    {
+        public Image HP;
+        public Text HPTxt;
+        public Image MP;
+        public Text MPTxt;
+        public Image Exp;
+        public Text ExpTxt;
+        public Text GoldTxt;
+    }
+    public PlayerInfo pInfo;
+
+    public int SetHP
+    {
+        get { return PlayerManager.instance.PlayerStatInfo.HP; }
+        set
+        {
+            PlayerManager.instance.PlayerStatInfo.HP = value;
+
+            int hp = PlayerManager.instance.PlayerStatInfo.HP;
+            int maxHP = PlayerManager.instance.PlayerStatInfo.MaxHP;
+            
+            if (hp >= maxHP)
+                hp = PlayerManager.instance.PlayerStatInfo.HP = maxHP;
+            
+            pInfo.HPTxt.text = hp.ToString();
+            pInfo.HP.rectTransform.sizeDelta = new Vector2(((float)hp / maxHP) * 350f, 40f);
+        }
+    }
+    #endregion
 
     private void Start()
     {
@@ -116,7 +147,10 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
-       
+        if(Input.GetKeyDown(KeyCode.Insert))
+        {
+            SetHP -= 10;
+        }
         
         //Damege
         if (OnDamege)

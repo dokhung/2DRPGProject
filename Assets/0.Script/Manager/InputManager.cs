@@ -265,14 +265,7 @@ public class InputManager : Singleton<InputManager>
 
     public void PickUp(Collision2D other)
     {
-        /*
-        Item itemComponent = other.gameObject.GetComponent<Item>();
-        if (itemComponent.itemType == AllEnum.ItemType.Etc)
-        {
-            InventoryManager.instance.Registration(itemComponent);
-            Destroy(other.gameObject); 
-        }
-        */
+        
         DropItem item = other.transform.GetComponent<DropItem>();
         if (item != null)
         {

@@ -20,7 +20,6 @@ public class PlayerManager : Singleton<PlayerManager>
     public void StatSetting()
     {
         PlayerStatInfo = new Stat.PlayerStat(50, 30, 5, 1, 0, 10, 1, 0, 1);
-        
     }
 
     private void Update()

@@ -105,96 +105,47 @@ public class UIManager : Singleton<UIManager>
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if (!OnInvenTory)
-            {
-                InvenToryUi.SetActive(true);
-                OnInvenTory = true; 
-            }
-            else if (OnInvenTory)
-            {
-                InvenToryUi.SetActive(false);
-                OnInvenTory = false; 
-            }
-            
+            OnInvenTory = !OnInvenTory;
+            InvenToryUi.SetActive(OnInvenTory);
         }
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            if (!OnInvenTory_Equip)
-            {
-                InvenToryUi_Equip.SetActive(true);
-                OnInvenTory_Equip = true;
-            }
-            else if (OnInvenTory_Equip)
-            {
-                InvenToryUi_Equip.SetActive(false);
-                OnInvenTory_Equip = false;
-            }
+            OnInvenTory_Equip = !OnInvenTory_Equip;
+            InvenToryUi_Equip.SetActive(OnInvenTory_Equip);
         }
-        
     }
 
-
-    public void OpenShop()
+    public void ShopUI(bool isShow)
     {
-        ShopUi.SetActive(true); 
+        ShopUi.SetActive(isShow); 
     }
 
-    public void ClosedShop()
+    public void StatUI(bool isShow)
     {
-        ShopUi.SetActive(false);
+        StatUi.SetActive(isShow);
     }
 
-    public void OpenStatUi()
+    public void EquipmentUI(bool isShow)
     {
-        StatUi.SetActive(true);
+        EquipmentUi.SetActive(isShow);
     }
 
-    public void CloseStatUi()
+    public void SkillUI(bool isShow)
     {
-        StatUi.SetActive(false);
+        SkillUi.SetActive(isShow);
     }
 
-    public void OpenEquipmentUi()
+    public void MenuUI(bool isShow)
     {
-        EquipmentUi.SetActive(true);
+        MenuUi.SetActive(isShow);
     }
 
-    public void CloseEquipmentUi()
+    public void OpenInventory(bool isShow)
     {
-        EquipmentUi.SetActive(false);
+        InvenToryUi.SetActive(isShow);
     }
 
-    public void OpenSkillUi()
-    {
-        SkillUi.SetActive(true);
-    }
-
-    public void CloseSkillUi()
-    {
-        SkillUi.SetActive(false);
-    }
-
-    public void OpenMenuUi()
-    {
-        MenuUi.SetActive(true);
-    }
-
-    public void CloseMenuUi()
-    {
-        MenuUi.SetActive(false);
-        // Instantiate(슬롯프리팹, 인벤토리 슬롯의 부모의 transform) 설정
-    }
-
-    public void OpenInventory()
-    {
-        InvenToryUi.SetActive(true);
-    }
-
-    public void CloseInventory()
-    {
-        InvenToryUi.SetActive(false);
-    }
 
     public void OpenEquip()
     {

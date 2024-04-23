@@ -102,7 +102,7 @@ MonoBehaviour:
   sr: {fileID: 2820759512042349852}
   itemType: 2
   potionType: 0
-  addValue: 50
+  addValue: 100
 --- !u!50 &2820759512042349841
 Rigidbody2D:
   serializedVersion: 4

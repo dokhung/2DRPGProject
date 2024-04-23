@@ -10,33 +10,71 @@ public class Slot : MonoBehaviour
 
 
     private DropItem dropItem;
+
+    private float quickSlotTimer = 0;
+    public AllEnum.PotionType PotionType { get; set; }
     public AllEnum.ItemType Type { get; set; }
 
     private int cnt;
+    private bool mouseDown = false;
     public int Count 
     {
         get { return cnt; }
         set
         {
             cnt = value;
-            if (cnt > 0)
-                cntTxt.text = cnt.ToString();
-            else
-                cntTxt.text = string.Empty;
+            cntTxt.text = cnt > 0 ? cnt.ToString() : string.Empty;
         }
     }
     public Sprite Sprite 
     {
         get { return iconImg.sprite; }
-        set
-        {
-            iconImg.sprite = value;
-        } 
+        set { iconImg.sprite = value; } 
     }
 
-    public void Start()
+    void Start()
     {
         Count = 0;
+    }
+
+    void Update()
+    {
+        if(mouseDown)
+        {
+            quickSlotTimer += Time.deltaTime;
+        }
+    }
+
+    public void OnButtonDown()
+    {
+        quickSlotTimer = 0;
+        mouseDown = true;
+    }
+
+    public void OnButtonUp()
+    {
+        mouseDown = false;
+
+        if (quickSlotTimer >= 2f)
+        {
+            if (Type == AllEnum.ItemType.Etc)
+            {
+                switch (PotionType)
+                {
+                    case AllEnum.PotionType.HP:
+                    case AllEnum.PotionType.ALL:
+                        Inventory.Instance.EquipQuickSlot(0, this);
+                        break;
+                    case AllEnum.PotionType.MP:
+                        Inventory.Instance.EquipQuickSlot(1, this);
+                        break;
+                }
+            }
+        }
+        else
+        {
+            OnUseItem();
+        }
     }
 
     public void OnUseItem()
@@ -47,7 +85,10 @@ public class Slot : MonoBehaviour
             case AllEnum.ItemType.Etc:
                 {
                     if (PlayerManager.Instance.PlayerStatInfo.HP >= PlayerManager.Instance.PlayerStatInfo.MaxHP)
+                    {
+                        Debug.Log("Ã¼·Â °¡µæ Âü");
                         return;
+                    }
 
                     Count--;
                     switch(dropItem.potionType)
@@ -68,6 +109,7 @@ public class Slot : MonoBehaviour
                     {
                         Emtpy();
                     }
+                    Inventory.Instance.QuickSlotReflush(this);
                 }
                 break;
         }
@@ -77,6 +119,10 @@ public class Slot : MonoBehaviour
     {
         iconImg.sprite = null;
         Count = 0;
+        dropItem = null;
+        quickSlotTimer = 0;
+        PotionType = AllEnum.PotionType.None;
+        Type = AllEnum.ItemType.None;
     }
 
     public void SetDropItem(DropItem dropItem)

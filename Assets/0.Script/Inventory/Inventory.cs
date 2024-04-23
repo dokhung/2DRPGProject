@@ -6,6 +6,10 @@ public class Inventory : Singleton<Inventory>
 {
     [SerializeField] private Transform itemParent;
     private List<Slot> items = new List<Slot>();
+
+    // 퀵슬롯 연결부
+    [SerializeField] private QuickSlot[] quickSlot;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +36,7 @@ public class Inventory : Singleton<Inventory>
         if (findIdx != -1)
         {
             items[findIdx].Count++;
+            items[findIdx].PotionType = dropItem.potionType;
             items[findIdx].Type = dropItem.itemType;
         }
         // 인벤토리에 자리가 없을경우 생성
@@ -47,4 +52,35 @@ public class Inventory : Singleton<Inventory>
             }
         }
     }
+
+    public void EquipQuickSlot(int index, Slot slot)
+    {
+        quickSlot[index].SetItem(slot);
+    }
+
+    public void SlotReflush(Slot slot, QuickSlot qSlot)
+    {
+        foreach (var item in items)
+        {
+            if(item.Equals(slot))
+            {
+                item.OnUseItem();
+                qSlot.SetItem(item);
+                break;
+            }
+        }
+    }
+
+    public void QuickSlotReflush(Slot slot)
+    {
+        foreach (var item in quickSlot)
+        {
+            if (item.slot.Equals(slot))
+            {
+                item.SetItem(slot);
+                break;
+            }
+        }
+    }
+
 }

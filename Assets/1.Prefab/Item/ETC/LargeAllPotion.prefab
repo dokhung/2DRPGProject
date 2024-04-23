@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 627160183973760614}
   - component: {fileID: 639758526108904532}
   m_Layer: 8
-  m_Name: HPMPPluse100Potion
+  m_Name: LargeAllPotion
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sr: {fileID: 7613028717321757410}
   itemType: 2
+  potionType: 2
+  addValue: 25
 --- !u!50 &627160183973760614
 Rigidbody2D:
   serializedVersion: 4

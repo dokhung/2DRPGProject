@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 405313124808101419}
   - component: {fileID: 6804949895911912721}
   m_Layer: 8
-  m_Name: HPMPPluse10Potion
+  m_Name: SmallAllPotion
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sr: {fileID: 7735923311843821931}
   itemType: 2
+  potionType: 2
+  addValue: 10
 --- !u!61 &405313124808101419
 BoxCollider2D:
   m_ObjectHideFlags: 0

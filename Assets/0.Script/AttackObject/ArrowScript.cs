@@ -55,7 +55,7 @@ public class ArrowScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Monster"))
         {
-            int damege = PlayerManager.Instance.PlayerStatInfo.Att;
+            int damege = PlayerManager.Instance.playerStat.Att;
             LV1_Monster monsterScript = other.collider.GetComponent<LV1_Monster>();
             monsterScript.TakeDamage(damege);
             InputManager.Instance.ArrowBtn.SetActive(true);

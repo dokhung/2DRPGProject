@@ -41,7 +41,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     void Start()
     {
-        MonsterStat = new Monster.MonsterStat(PlayerManager.Instance.PlayerStatInfo.Level);
+        MonsterStat = new Monster.MonsterStat(PlayerManager.Instance.playerStat.Level);
         sp = GetComponent<SpriteRenderer>();
         for (int i = 0; i < MonsterpoolCount; i++)
         {

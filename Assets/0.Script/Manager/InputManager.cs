@@ -22,7 +22,6 @@ public class InputManager : Singleton<InputManager>
     private SpriteRenderer sp;
     public Animator anim;
     
-    private Stat.PlayerStat Stat;
     public bool IsHit = false;
     public bool PlayerIsHit = false;
     
@@ -87,17 +86,15 @@ public class InputManager : Singleton<InputManager>
             {
                 jumpCount += 1;
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-                //anim.SetTrigger("Jump");
                 jumpCount++;
             }
             else if (jumpCount >= 1 && jumpCount <= 2)
             {
-                if (PlayerManager.instance.PlayerStatInfo.MP >= 1)
+                if (UIManager.Instance.SetMP >= 1)
                 {
-                    PlayerManager.instance.PlayerStatInfo.MP -= 1;
+                    UIManager.Instance.SetMP -= 1;
                     jumpCount += 1;
                     rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-                    //anim.SetTrigger("Jump");
                     jumpCount++;
                 }
                 else
@@ -106,33 +103,10 @@ public class InputManager : Singleton<InputManager>
                 }
             }
         }
-        else if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("인위적으로 공격력을 증가시킴");
-            PlayerManager.instance.PlayerStatInfo.Att += 10;
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            PlayerManager.instance.PlayerStatInfo.HP -= 10;
-        }
-        else if (Input.GetKeyDown(KeyCode.M))
-        {
-            PlayerManager.instance.PlayerStatInfo.MP -= 10;
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("인위적으로 공격력을 감소");
-            PlayerManager.instance.PlayerStatInfo.Att = 5;
-        }
-        else if (Input.GetKeyDown(KeyCode.N))
-        {
-            Debug.Log("인위적으로 공격력을 0으로");
-            PlayerManager.instance.PlayerStatInfo.Att = 0;
-        }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             rigid.AddForce(Vector2.right * 10,ForceMode2D.Impulse);
-            PlayerManager.instance.PlayerStatInfo.MP -= 2;
+            UIManager.Instance.SetMP -= 2;
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
@@ -159,7 +133,7 @@ public class InputManager : Singleton<InputManager>
 
     public void E_Btn()
     {
-        if (PlayerManager.instance.PlayerStatInfo.MP > 0)
+        if (PlayerManager.instance.playerStat.MP > 0)
         {
             if (gameObject.transform.localScale.x > 0)
             {
@@ -185,7 +159,7 @@ public class InputManager : Singleton<InputManager>
 
     public void BoolArrow()
     {
-        PlayerManager.instance.PlayerStatInfo.MP -= 1;
+        UIManager.Instance.SetMP -= 1;
         ArrowAttack = true;
         Sword.SetActive(false);
         BowBody.SetActive(true);  
@@ -225,8 +199,8 @@ public class InputManager : Singleton<InputManager>
                     // new Vector3(playerDirection, 0, 0)은 플레이어의 방향을 나타내는 벡터입니다.
                     new Vector3(playerDirection, 0, 0));
                 int RandomNum = Random.Range(1, 5);
-                int MinDamege = PlayerManager.instance.PlayerStatInfo.Att - RandomNum;
-                int MaxDamege = PlayerManager.instance.PlayerStatInfo.Att + RandomNum;
+                int MinDamege = PlayerManager.instance.playerStat.Att - RandomNum;
+                int MaxDamege = PlayerManager.instance.playerStat.Att + RandomNum;
                 int damege = Random.Range(MinDamege, MaxDamege);
                 
                  //내적 결과가 양수(두 벡터의 방향이 일치함)이고, 플레이어가 공격 상태인 경우에만 실행합니다.
@@ -245,6 +219,16 @@ public class InputManager : Singleton<InputManager>
         IsHit = false; 
     }
 
+    public void BehitAnim()
+    {
+        anim.SetBool("BeHit",true);
+    }
+
+    public void NotBehitAnim()
+    {
+        anim.SetBool("BeHit",false);
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -258,7 +242,7 @@ public class InputManager : Singleton<InputManager>
         else if (other.gameObject.CompareTag("Money"))
         {
             int PlusMoney = Random.Range(1, 10);
-            PlayerManager.instance.PlayerStatInfo.Money += PlusMoney;
+            PlayerManager.instance.playerStat.Gold += PlusMoney;
             Destroy(other.gameObject);
         }
     }

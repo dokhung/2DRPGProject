@@ -7,6 +7,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class UIManager : Singleton<UIManager>
 {
     [Header("UiList")]
@@ -19,6 +20,26 @@ public class UIManager : Singleton<UIManager>
     public GameObject InvenToryUi_Equip;
     public GameObject InvenToryUi_Etc;
     
+    [Header("PlayerInfo")]
+    public Image HP;
+    public Text HPTxt;
+    public Image MP;
+    public Text MPTxt;
+    public Image Exp;
+    public Text ExpTxt;
+    public Text GoldTxt;
+
+    [Header("StatUI")]
+    public Text StatLV;
+    public Text StatHP;
+    public Text StatMaxHP;
+    public Text StatMP;
+    public Text StatMaxMP;
+    public Text StatEXP;
+    public Text StatMaxEXP;
+    public Text StatATT;
+    public Text StatDEF;
+    
     
     
     
@@ -30,70 +51,189 @@ public class UIManager : Singleton<UIManager>
     private float DamegePosition = 0;
     public Transform DamegeInitTarget;
     public GameObject BeHitImage;
-
-    [Header("SHOP")] 
-    public Text SHOPholdMoney;
     
     //Get Money is Message
 
     private bool OnInvenTory = false;
     private bool OnInvenTory_Equip = false;
     private bool OnInvenTory_Etc = false;
+    private bool OnStat = false;
     
 
-    #region 새로운 코드
-    [System.Serializable]
-    public class PlayerInfo
-    {
-        public Image HP;
-        public Text HPTxt;
-        public Image MP;
-        public Text MPTxt;
-        public Image Exp;
-        public Text ExpTxt;
-        public Text GoldTxt;
-    }
-    public PlayerInfo pInfo;
+    #region Set
 
     public int SetHP
     {
-        get { return PlayerManager.instance.PlayerStatInfo.HP; }
+        get { return PlayerManager.instance.playerStat.HP; }
         set
         {
-            PlayerManager.instance.PlayerStatInfo.HP = value;
+            PlayerManager.instance.playerStat.HP = value;
 
-            int hp = PlayerManager.instance.PlayerStatInfo.HP;
-            int maxHP = PlayerManager.instance.PlayerStatInfo.MaxHP;
+            int hp = PlayerManager.instance.playerStat.HP;
+            int maxHP = PlayerManager.instance.playerStat.MaxHP;
             
             if (hp >= maxHP)
-                hp = PlayerManager.instance.PlayerStatInfo.HP = maxHP;
+                hp = PlayerManager.instance.playerStat.HP = maxHP;
             
-            pInfo.HPTxt.text = hp.ToString();
-            pInfo.HP.rectTransform.sizeDelta = new Vector2(((float)hp / maxHP) * 350f, 40f);
+            HPTxt.text = hp.ToString();
+            HP.rectTransform.sizeDelta = new Vector2(((float)hp / maxHP) * 350f, 40f);
+        }
+    }
+
+    public int SetMAXHP
+    {
+        get { return PlayerManager.instance.playerStat.MaxHP; }
+        set
+        {
+            PlayerManager.instance.playerStat.MaxHP = value;
+            int maxHP = PlayerManager.instance.playerStat.MaxHP;
+            StatMaxHP.text = maxHP.ToString();
+        }
+    }
+    public int SetMP
+    {
+        get { return PlayerManager.instance.playerStat.MP; }
+        set
+        {
+            PlayerManager.instance.playerStat.MP = value;
+
+            int mp = PlayerManager.instance.playerStat.MP;
+            int maxMP = PlayerManager.instance.playerStat.MaxMP;
+            if (mp >= maxMP)
+                mp = PlayerManager.instance.playerStat.MP = maxMP;
+            MPTxt.text = mp.ToString();
+            MP.rectTransform.sizeDelta = new Vector2(((float)mp / maxMP) * 350f, 40f);
+
+        }
+    }
+    public int SetMAXMP
+    {
+        get { return PlayerManager.instance.playerStat.MaxMP; }
+        set
+        {
+            PlayerManager.instance.playerStat.MaxMP = value;
+            int maxMP = PlayerManager.instance.playerStat.MaxMP;
+            StatMaxMP.text = maxMP.ToString();
+        }
+    }
+    public int SetEXP
+    {
+        get { return PlayerManager.instance.playerStat.Exp; }
+        set
+        {
+            PlayerManager.instance.playerStat.Exp = value;
+
+            int exp = PlayerManager.instance.playerStat.Exp;
+            int maxexp = PlayerManager.instance.playerStat.MaxExp;
+            if (exp >= maxexp)
+                exp = PlayerManager.instance.playerStat.Exp = maxexp;
+            ExpTxt.text = exp.ToString();
+            Exp.rectTransform.sizeDelta = new Vector2(((float)exp / maxexp) * 350f, 40f);
+        }
+    }
+    public int SetMAXEXP
+    {
+        get { return PlayerManager.instance.playerStat.MaxExp; }
+        set
+        {
+            PlayerManager.instance.playerStat.MaxExp = value;
+            int maxExp = PlayerManager.instance.playerStat.MaxExp;
+            StatMaxHP.text = maxExp.ToString();
+        }
+    }
+    public int SetGold
+    {
+        get
+        {
+            return PlayerManager.instance.playerStat.Gold;
+        }
+        set
+        {
+            PlayerManager.instance.playerStat.Gold = value;
+            int gold = PlayerManager.instance.playerStat.Gold;
+            GoldTxt.text = gold.ToString();
+
+        }
+    }
+
+    public int SetLevel
+    {
+        get
+        {
+            return PlayerManager.instance.playerStat.Level;
+        }
+        set
+        {
+            PlayerManager.instance.playerStat.Level = value;
+            int level = PlayerManager.instance.playerStat.Level;
+            StatLV.text = level.ToString();
+        }
+    }
+
+    public int SetAtt
+    {
+        get
+        {
+            return PlayerManager.instance.playerStat.Att;
+        }
+        set
+        {
+            PlayerManager.instance.playerStat.Att = value;
+            int att = PlayerManager.instance.playerStat.Att;
+            StatATT.text = att.ToString();
+        }
+    }
+
+    public int SetDef
+    {
+        get
+        {
+            return PlayerManager.instance.playerStat.Def;
+        }
+        set
+        {
+            PlayerManager.instance.playerStat.Def = value;
+            int def = PlayerManager.instance.playerStat.Def;
+            StatDEF.text = def.ToString();
         }
     }
     #endregion
+    
+    
 
     private void Start()
     {
-        ShopUi.SetActive(false);
-        StatUi.SetActive(false);
-        EquipmentUi.SetActive(false);
-        SkillUi.SetActive(false);
-        MenuUi.SetActive(false);
-        InvenToryUi.SetActive(false);
+        StatUI(false);
+        ShopUI(false);
+        EquipmentUI(false);
+        SkillUI(false);
+        MenuUI(false);
         Damege.gameObject.SetActive(false);
         BeHitImage.SetActive(false);
+        OpenInventory(false);
+        
+        // 시작때 1번만 적용
+        // HPTxt.text = PlayerManager.instance.playerStat.HP.ToString();
+        // MPTxt.text = PlayerManager.instance.playerStat.MP.ToString();
+        // ExpTxt.text = PlayerManager.instance.playerStat.Exp.ToString();
+        // GoldTxt.text = PlayerManager.instance.playerStat.Gold.ToString();
+        // StatLV.text = PlayerManager.instance.playerStat.Level.ToString();
+        // StatHP.text = PlayerManager.instance.playerStat.HP.ToString();
+        // StatMaxHP.text = PlayerManager.instance.playerStat.MaxHP.ToString();
+        // StatMP.text = PlayerManager.instance.playerStat.MP.ToString();
+        // StatMaxMP.text = PlayerManager.instance.playerStat.MaxMP.ToString();
+        // StatEXP.text = PlayerManager.instance.playerStat.Exp.ToString();
+        // StatMaxEXP.text = PlayerManager.instance.playerStat.MaxExp.ToString();
+        // StatATT.text = PlayerManager.instance.playerStat.Att.ToString();
+        // StatDEF.text = PlayerManager.instance.playerStat.Def.ToString();
+        // HPTxt.text = SetHP.ToString();
+        // StatHP.text = SetHP.ToString();
+
     }
 
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Insert))
-        {
-            SetHP -= 10;
-        }
-        
         //Damege
         if (OnDamege)
         {
@@ -114,6 +254,12 @@ public class UIManager : Singleton<UIManager>
             OnInvenTory_Equip = !OnInvenTory_Equip;
             InvenToryUi_Equip.SetActive(OnInvenTory_Equip);
         }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            OnStat = !OnStat;
+            StatUi.SetActive(OnStat);
+        }
     }
 
     public void ShopUI(bool isShow)
@@ -123,6 +269,7 @@ public class UIManager : Singleton<UIManager>
 
     public void StatUI(bool isShow)
     {
+        Debug.Log(isShow);
         StatUi.SetActive(isShow);
     }
 

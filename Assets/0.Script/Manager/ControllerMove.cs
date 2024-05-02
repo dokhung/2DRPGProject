@@ -27,7 +27,7 @@ public class ControllerMove : MonoBehaviour
     [Header("JumpPower")]
     public float jumpPower = 4;
     [Header("점프를 하였는가?")]
-    //public Animator anim;
+    public Animator anim;
     //public Transform SkinObj;
     
     // 화살을 발사한다.
@@ -36,11 +36,24 @@ public class ControllerMove : MonoBehaviour
     public Transform ArrowPrefablocation;
 
     public GameObject ArrowBtn;
+    
+    public GameObject BowBody;
+    //발사 유무
+    public bool ArrowAttack = false;
+    
+    //무기
+    public GameObject Sword;
+    
+    public bool isAttacking = false;
+    
+    
+    //범위
+    public float detectionRadius = 0.4f;
 
     private void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
-        //anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -50,13 +63,13 @@ public class ControllerMove : MonoBehaviour
             case Dir.Right:
                 vec.x = 5;
                 transform.Translate(vec * Time.deltaTime);
-                transform.localScale = new Vector3(-2, 2, 1);
+                transform.localScale = new Vector3(-1, 1, 1);
                 MoveAnim();
                 break;
             case Dir.Left:
                 vec.x = -5;
                 transform.Translate(vec * Time.deltaTime);
-                transform.localScale = new Vector3(2, 2, 1);
+                transform.localScale = new Vector3(1, 1, 1);
                 MoveAnim();
                 break;
             // default: anim.SetBool("Run",false);
@@ -82,48 +95,65 @@ public class ControllerMove : MonoBehaviour
         }
     }
 
-    public void Attack()
+    public void AttackAnim()
     {
-        //anim.SetTrigger("Attack");
+        if (!isAttacking)
+        {
+            anim.SetBool("SwordAttack",true);
+            StartCoroutine(StartAttackCooldown());
+        }
+
+        IEnumerator StartAttackCooldown()
+        {
+            isAttacking = true;
+            yield return new WaitForSeconds(0.5f);
+            isAttacking = false;
+            anim.SetBool("SwordAttack",false);
+        }
     }
 
-    public void ArrowAttack()
+    public void E_Btn()
     {
-        // 애니메이션을 넣는다.
+        if (PlayerManager.Instance.playerStat.MP > 0)
+        {
+            if (gameObject.transform.localScale.x > 0)
+            {
+                BowAttack();
+
+            }
+            else if (gameObject.transform.localScale.x < 0)
+            {
+                BowAttack();
+            } 
+        }
+    }
+
+    public void BowAttack()
+    {
+        if (!ArrowAttack)
+        {
+            BoolArrow();
+            Invoke("NewArrowAttack",0.7f);
+        }
+    }
+    
+    public void BoolArrow()
+    {
+        UIManager.Instance.SetMP -= 1;
+        ArrowAttack = true;
+        Sword.SetActive(false);
+        BowBody.SetActive(true);  
+        anim.SetBool("BowAttack",true);
+    }
+
+    public void NewArrowAttack()
+    {
         GameObject obj;
-        if (gameObject.transform.localScale.x > 0)
-        {
-            if (!InputManager.Instance.ArrowAttack)
-            {
-                InputManager.Instance.ArrowAttack = true;
-                obj = Instantiate(ArrowObject,ArrowPrefablocation.position,ArrowPrefablocation.rotation);
-                obj.SetActive(true);
-                ArrowBtn.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("화살을 발사할수없다.");
-                Debug.Log("InputManager.Instance.ArrowAttack :: " + InputManager.Instance.ArrowAttack);
-            }
-        }
-
-        
-        else if (gameObject.transform.localScale.x < 0)
-        {
-            if (!InputManager.Instance.ArrowAttack)
-            {
-                InputManager.Instance.ArrowAttack = true;
-                obj = Instantiate(ArrowObject,ArrowPrefablocation.position,ArrowPrefablocation.rotation);
-                obj.SetActive(true);
-                ArrowBtn.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("화살을 발사할수없다.");
-                Debug.Log("InputManager.Instance.ArrowAttack :: " + InputManager.Instance.ArrowAttack);
-            }
-        }
+        obj = Instantiate(ArrowObject,ArrowPrefablocation.position,ArrowPrefablocation.rotation);
+        obj.SetActive(true);
+        ArrowBtn.SetActive(false);
     }
+
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -136,6 +166,6 @@ public class ControllerMove : MonoBehaviour
 
     public void MoveAnim()
     {
-        //anim.SetBool("Dash",true);
+        anim.SetBool("Dash",true);
     }
 }

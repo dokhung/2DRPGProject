@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ControllerButton : MonoBehaviour
 {
-     public ControllerMove PlyaerInputBtn;
+     public ControllerMove PlayerInputBtn;
      public Dir Right = Dir.End;
      
      
@@ -15,25 +15,25 @@ public class ControllerButton : MonoBehaviour
 
      public void MoveX()
      {
-          PlyaerInputBtn.SetDir(Right);
+          PlayerInputBtn.SetDir(Right);
      }
      public void PointUp() 
      {
-          PlyaerInputBtn.SetDir(Dir.End);
+          PlayerInputBtn.SetDir(Dir.End);
      }
 
      public void Jump()
      {
-          PlyaerInputBtn.Jump();
+          PlayerInputBtn.Jump();
      }
 
      public void Attack()
      {
-          PlyaerInputBtn.Attack();
+          PlayerInputBtn.AttackAnim();
      }
 
      public void ArrowAttack()
      {
-          PlyaerInputBtn.ArrowAttack();
+          PlayerInputBtn.E_Btn();
      }
 }

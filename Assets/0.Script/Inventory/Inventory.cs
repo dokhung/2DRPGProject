@@ -7,7 +7,7 @@ public class Inventory : Singleton<Inventory>
     [SerializeField] private Transform itemParent;
     private List<Slot> items = new List<Slot>();
 
-    // Äü½½·Ô ¿¬°áºÎ
+    // í€µìŠ¬ë¡¯ ì—°ê²°ë¶€
     [SerializeField] private QuickSlot[] quickSlot;
 
     // Start is called before the first frame update
@@ -32,14 +32,14 @@ public class Inventory : Singleton<Inventory>
     public void CreateItem(DropItem dropItem)
     {
         int findIdx = FindEmtpy(dropItem.Sprite);
-        // ÀÎº¥Åä¸®¿¡ ÀÚ¸®°¡ ÀÖÀ»°æ¿ì Ãß°¡
+        // ì¸ë²¤í† ë¦¬ì— ìë¦¬ê°€ ìˆì„ê²½ìš° ì¶”ê°€
         if (findIdx != -1)
         {
             items[findIdx].Count++;
             items[findIdx].PotionType = dropItem.potionType;
             items[findIdx].Type = dropItem.itemType;
         }
-        // ÀÎº¥Åä¸®¿¡ ÀÚ¸®°¡ ¾øÀ»°æ¿ì »ı¼º
+        // ì¸ë²¤í† ë¦¬ì— ìë¦¬ê°€ ì—†ì„ê²½ìš° ìƒì„±
         else
         {
             for (int i = 0; i < items.Count; i++)

@@ -54,7 +54,7 @@ public class LV1_Monster : Monster
 
     public override void InitializeMonsterStat()
     {
-        monsterStat = new MonsterStat(PlayerManager.Instance.PlayerStatInfo.Level);
+        monsterStat = new MonsterStat(PlayerManager.Instance.playerStat.Level);
     }
 
     private void Update()
@@ -137,7 +137,7 @@ public class LV1_Monster : Monster
             currentState = MonsterState.Detection;
             Rigidbody2D playerRigidBody = other.rigidbody;
             Vector2 forceDirection = spriteRenderer.flipX ? new Vector2(-2, 2) : new Vector2(2, 2);
-            PlayerManager.Instance.PlayerStatInfo.HP -= monsterStat.att;
+            UIManager.Instance.SetHP -= monsterStat.att;
             if (!UIManager.Instance.OnDamege && !InputManager.Instance.PlayerIsHit)
             {
                 playerRigidBody.AddForce(forceDirection, ForceMode2D.Impulse);
@@ -145,6 +145,7 @@ public class LV1_Monster : Monster
                 UIManager.Instance.PlayerBeHitDamege(monsterStat.att);
                 SpriteRenderer HeadColor = InputManager.Instance.HeadColor.gameObject.GetComponent<SpriteRenderer>();
                 HeadColor.color = Color.red;
+                InputManager.Instance.BehitAnim();
                 Invoke("ResetState", 5f); 
                 Invoke("Playerinvincibility",1f);
             }
@@ -156,6 +157,7 @@ public class LV1_Monster : Monster
         SpriteRenderer HeadColor = InputManager.Instance.HeadColor.gameObject.GetComponent<SpriteRenderer>();
         HeadColor.color = Color.white;
         InputManager.Instance.PlayerIsHit = false; 
+        InputManager.Instance.NotBehitAnim();
     }
 
     public void ResetState()
@@ -175,7 +177,7 @@ public class LV1_Monster : Monster
 
     private void Die()
     {
-        PlayerManager.Instance.PlayerStatInfo.ExpVal += monsterStat.giveExp;
+        UIManager.Instance.SetEXP += monsterStat.giveExp;
         deadAnimation.SetActive(false);
         gameObject.SetActive(false);
     }

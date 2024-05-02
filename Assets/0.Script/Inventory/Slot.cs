@@ -81,12 +81,12 @@ public class Slot : MonoBehaviour
     {
         switch(Type)
         {
-            // º“∏æ∆¿Ã≈€
+            // Ï±ÑÎ†•
             case AllEnum.ItemType.Etc:
                 {
-                    if (PlayerManager.Instance.PlayerStatInfo.HP >= PlayerManager.Instance.PlayerStatInfo.MaxHP)
+                    if (PlayerManager.Instance.playerStat.HP >= PlayerManager.Instance.playerStat.MaxHP)
                     {
-                        Debug.Log("√º∑¬ ∞°µÊ ¬¸");
+                        Debug.Log("ÏµúÎåÄÏ±ÑÎ†•Ïù¥Î≥¥Îã§ Ï±ÑÎ†•Ïù¥ ÎßéÏùå");
                         return;
                     }
 
@@ -97,11 +97,11 @@ public class Slot : MonoBehaviour
                             UIManager.Instance.SetHP += dropItem.addValue;
                             break;
                         case AllEnum.PotionType.MP:
-                            PlayerManager.Instance.PlayerStatInfo.MP += dropItem.addValue;
+                            UIManager.Instance.SetMP += dropItem.addValue;
                             break;
                         case AllEnum.PotionType.ALL:
                             UIManager.Instance.SetHP += dropItem.addValue;
-                            PlayerManager.Instance.PlayerStatInfo.MP += dropItem.addValue;
+                            UIManager.Instance.SetMP += dropItem.addValue;
                             break;
                     }
 

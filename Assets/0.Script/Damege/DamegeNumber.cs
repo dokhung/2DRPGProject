@@ -11,6 +11,6 @@ public class DamegeNumber : MonoBehaviour
 
     private void Update()
     {
-        DamegeInt.text = PlayerManager.Instance.PlayerStatInfo.Att.ToString();
+        DamegeInt.text = PlayerManager.Instance.playerStat.Att.ToString();
     }
 }

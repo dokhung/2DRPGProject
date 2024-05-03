@@ -64,16 +64,16 @@ public class UIManager : Singleton<UIManager>
 
     public int SetHP
     {
-        get { return PlayerManager.instance.playerStat.HP; }
+        get { return PlayerManager.instance.HP; }
         set
         {
-            PlayerManager.instance.playerStat.HP = value;
+            PlayerManager.instance.HP = value;
 
-            int hp = PlayerManager.instance.playerStat.HP;
-            int maxHP = PlayerManager.instance.playerStat.MaxHP;
+            int hp = PlayerManager.instance.HP;
+            int maxHP = PlayerManager.instance.MaxHP;
             
             if (hp >= maxHP)
-                hp = PlayerManager.instance.playerStat.HP = maxHP;
+                hp = PlayerManager.instance.HP = maxHP;
             
             HPTxt.text = hp.ToString();
             HP.rectTransform.sizeDelta = new Vector2(((float)hp / maxHP) * 350f, 40f);
@@ -82,25 +82,25 @@ public class UIManager : Singleton<UIManager>
 
     public int SetMAXHP
     {
-        get { return PlayerManager.instance.playerStat.MaxHP; }
+        get { return PlayerManager.instance.MaxHP; }
         set
         {
-            PlayerManager.instance.playerStat.MaxHP = value;
-            int maxHP = PlayerManager.instance.playerStat.MaxHP;
+            PlayerManager.instance.MaxHP = value;
+            int maxHP = PlayerManager.instance.MaxHP;
             StatMaxHP.text = maxHP.ToString();
         }
     }
     public int SetMP
     {
-        get { return PlayerManager.instance.playerStat.MP; }
+        get { return PlayerManager.instance.MP; }
         set
         {
-            PlayerManager.instance.playerStat.MP = value;
+            PlayerManager.instance.MP = value;
 
-            int mp = PlayerManager.instance.playerStat.MP;
-            int maxMP = PlayerManager.instance.playerStat.MaxMP;
+            int mp = PlayerManager.instance.MP;
+            int maxMP = PlayerManager.instance.MaxMP;
             if (mp >= maxMP)
-                mp = PlayerManager.instance.playerStat.MP = maxMP;
+                mp = PlayerManager.instance.MP = maxMP;
             MPTxt.text = mp.ToString();
             MP.rectTransform.sizeDelta = new Vector2(((float)mp / maxMP) * 350f, 40f);
 
@@ -108,36 +108,36 @@ public class UIManager : Singleton<UIManager>
     }
     public int SetMAXMP
     {
-        get { return PlayerManager.instance.playerStat.MaxMP; }
+        get { return PlayerManager.instance.MaxMP; }
         set
         {
-            PlayerManager.instance.playerStat.MaxMP = value;
-            int maxMP = PlayerManager.instance.playerStat.MaxMP;
+            PlayerManager.instance.MaxMP = value;
+            int maxMP = PlayerManager.instance.MaxMP;
             StatMaxMP.text = maxMP.ToString();
         }
     }
     public int SetEXP
     {
-        get { return PlayerManager.instance.playerStat.Exp; }
+        get { return PlayerManager.instance.Exp; }
         set
         {
-            PlayerManager.instance.playerStat.Exp = value;
+            PlayerManager.instance.Exp = value;
 
-            int exp = PlayerManager.instance.playerStat.Exp;
-            int maxexp = PlayerManager.instance.playerStat.MaxExp;
+            int exp = PlayerManager.instance.Exp;
+            int maxexp = PlayerManager.instance.MaxExp;
             if (exp >= maxexp)
-                exp = PlayerManager.instance.playerStat.Exp = maxexp;
+                exp = PlayerManager.instance.Exp = maxexp;
             ExpTxt.text = exp.ToString();
             Exp.rectTransform.sizeDelta = new Vector2(((float)exp / maxexp) * 350f, 40f);
         }
     }
     public int SetMAXEXP
     {
-        get { return PlayerManager.instance.playerStat.MaxExp; }
+        get { return PlayerManager.instance.MaxExp; }
         set
         {
-            PlayerManager.instance.playerStat.MaxExp = value;
-            int maxExp = PlayerManager.instance.playerStat.MaxExp;
+            PlayerManager.instance.MaxExp = value;
+            int maxExp = PlayerManager.instance.MaxExp;
             StatMaxHP.text = maxExp.ToString();
         }
     }
@@ -145,12 +145,12 @@ public class UIManager : Singleton<UIManager>
     {
         get
         {
-            return PlayerManager.instance.playerStat.Gold;
+            return PlayerManager.instance.Gold;
         }
         set
         {
-            PlayerManager.instance.playerStat.Gold = value;
-            int gold = PlayerManager.instance.playerStat.Gold;
+            PlayerManager.instance.Gold = value;
+            int gold = PlayerManager.instance.Gold;
             GoldTxt.text = gold.ToString();
 
         }
@@ -160,12 +160,12 @@ public class UIManager : Singleton<UIManager>
     {
         get
         {
-            return PlayerManager.instance.playerStat.Level;
+            return PlayerManager.instance.Level;
         }
         set
         {
-            PlayerManager.instance.playerStat.Level = value;
-            int level = PlayerManager.instance.playerStat.Level;
+            PlayerManager.instance.Level = value;
+            int level = PlayerManager.instance.Level;
             StatLV.text = level.ToString();
         }
     }
@@ -174,12 +174,12 @@ public class UIManager : Singleton<UIManager>
     {
         get
         {
-            return PlayerManager.instance.playerStat.Att;
+            return PlayerManager.instance.Att;
         }
         set
         {
-            PlayerManager.instance.playerStat.Att = value;
-            int att = PlayerManager.instance.playerStat.Att;
+            PlayerManager.instance.Att = value;
+            int att = PlayerManager.instance.Att;
             StatATT.text = att.ToString();
         }
     }
@@ -188,12 +188,12 @@ public class UIManager : Singleton<UIManager>
     {
         get
         {
-            return PlayerManager.instance.playerStat.Def;
+            return PlayerManager.instance.Def;
         }
         set
         {
-            PlayerManager.instance.playerStat.Def = value;
-            int def = PlayerManager.instance.playerStat.Def;
+            PlayerManager.instance.Def = value;
+            int def = PlayerManager.instance.Def;
             StatDEF.text = def.ToString();
         }
     }
@@ -213,22 +213,9 @@ public class UIManager : Singleton<UIManager>
         OpenInventory(false);
         
         // 시작때 1번만 적용
-        // HPTxt.text = PlayerManager.instance.playerStat.HP.ToString();
-        // MPTxt.text = PlayerManager.instance.playerStat.MP.ToString();
-        // ExpTxt.text = PlayerManager.instance.playerStat.Exp.ToString();
-        // GoldTxt.text = PlayerManager.instance.playerStat.Gold.ToString();
-        // StatLV.text = PlayerManager.instance.playerStat.Level.ToString();
-        // StatHP.text = PlayerManager.instance.playerStat.HP.ToString();
-        // StatMaxHP.text = PlayerManager.instance.playerStat.MaxHP.ToString();
-        // StatMP.text = PlayerManager.instance.playerStat.MP.ToString();
-        // StatMaxMP.text = PlayerManager.instance.playerStat.MaxMP.ToString();
-        // StatEXP.text = PlayerManager.instance.playerStat.Exp.ToString();
-        // StatMaxEXP.text = PlayerManager.instance.playerStat.MaxExp.ToString();
-        // StatATT.text = PlayerManager.instance.playerStat.Att.ToString();
-        // StatDEF.text = PlayerManager.instance.playerStat.Def.ToString();
-        // HPTxt.text = SetHP.ToString();
-        // StatHP.text = SetHP.ToString();
-
+        HPTxt.text = SetHP.ToString();
+        StatHP.text = SetHP.ToString();
+        
     }
 
 
@@ -242,13 +229,15 @@ public class UIManager : Singleton<UIManager>
             OnDamege = false;
             Invoke("PlayerBeHitDamegeTime",1);
         }
-
+        
+        // ETC_Inventory
         if (Input.GetKeyDown(KeyCode.I))
         {
             OnInvenTory = !OnInvenTory;
             InvenToryUi.SetActive(OnInvenTory);
         }
-
+        
+        // Equip_Inventory
         if (Input.GetKeyDown(KeyCode.G))
         {
             OnInvenTory_Equip = !OnInvenTory_Equip;
@@ -269,7 +258,6 @@ public class UIManager : Singleton<UIManager>
 
     public void StatUI(bool isShow)
     {
-        Debug.Log(isShow);
         StatUi.SetActive(isShow);
     }
 

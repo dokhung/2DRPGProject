@@ -54,7 +54,7 @@ public class LV1_Monster : Monster
 
     public override void InitializeMonsterStat()
     {
-        monsterStat = new MonsterStat(PlayerManager.Instance.playerStat.Level);
+        monsterStat = new MonsterStat(PlayerManager.Instance.Level);
     }
 
     private void Update()

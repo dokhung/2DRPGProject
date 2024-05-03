@@ -52,12 +52,14 @@ public class Inventory : Singleton<Inventory>
             }
         }
     }
-
+    
+    // 퀵슬롯에 아이템을 추가한다.
     public void EquipQuickSlot(int index, Slot slot)
     {
         quickSlot[index].SetItem(slot);
     }
-
+    
+    // 슬롯
     public void SlotReflush(Slot slot, QuickSlot qSlot)
     {
         foreach (var item in items)
@@ -70,7 +72,8 @@ public class Inventory : Singleton<Inventory>
             }
         }
     }
-
+    
+    // 퀵슬롯
     public void QuickSlotReflush(Slot slot)
     {
         foreach (var item in quickSlot)

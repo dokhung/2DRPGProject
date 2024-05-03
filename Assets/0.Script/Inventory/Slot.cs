@@ -84,7 +84,7 @@ public class Slot : MonoBehaviour
             // 채력
             case AllEnum.ItemType.Etc:
                 {
-                    if (PlayerManager.Instance.playerStat.HP >= PlayerManager.Instance.playerStat.MaxHP)
+                    if (PlayerManager.Instance.HP >= PlayerManager.Instance.MaxHP)
                     {
                         Debug.Log("최대채력이보다 채력이 많음");
                         return;

@@ -15,10 +15,7 @@ public class Buttonfunsion : MonoBehaviour
 
     public void StartFunsion()
     {
-        Debug.Log("StartFunsion is On");
         LoadingText.SetActive(true);
-
-        // 5초 후에 DeactivateLoadingText 함수를 호출
         Invoke("DeactivateLoadingText", 5f);
     }
 
@@ -30,7 +27,6 @@ public class Buttonfunsion : MonoBehaviour
 
     public void ExitFunsion()
     {
-        Debug.Log("ExitFunsion is On");
         Application.Quit();
     }
 }

@@ -67,7 +67,6 @@ public class InputManager : Singleton<InputManager>
         if (x > 0)
         {
             anim.SetBool("Dash",true);
-            // SpriteRenderer HeadCol = HeadColor.gameObject.GetComponent<SpriteRenderer>();
             transform.localScale = new Vector3(-1, 1, 1);
         } else if (x < 0) {
             anim.SetBool("Dash",true);
@@ -133,19 +132,16 @@ public class InputManager : Singleton<InputManager>
 
     public void E_Btn()
     {
-        if (PlayerManager.instance.playerStat.MP > 0)
-        {
-            if (gameObject.transform.localScale.x > 0)
-            {
-                BowAttack();
+    
+        if (PlayerManager.instance.MP <= 0)
+            return;
 
-            }
-            else if (gameObject.transform.localScale.x < 0)
-            {
-                BowAttack();
-            } 
+        if (gameObject.transform.localScale.x != 0)
+        {
+            BowAttack();
         }
     }
+
 
     public void BowAttack()
     {
@@ -199,8 +195,11 @@ public class InputManager : Singleton<InputManager>
                     // new Vector3(playerDirection, 0, 0)은 플레이어의 방향을 나타내는 벡터입니다.
                     new Vector3(playerDirection, 0, 0));
                 int RandomNum = Random.Range(1, 5);
-                int MinDamege = PlayerManager.instance.playerStat.Att - RandomNum;
-                int MaxDamege = PlayerManager.instance.playerStat.Att + RandomNum;
+                // 최소 데미지
+                int MinDamege = PlayerManager.instance.Att - RandomNum;
+                // 최대 데미지
+                int MaxDamege = PlayerManager.instance.Att + RandomNum;
+                // 데미지 랜덤
                 int damege = Random.Range(MinDamege, MaxDamege);
                 
                  //내적 결과가 양수(두 벡터의 방향이 일치함)이고, 플레이어가 공격 상태인 경우에만 실행합니다.
@@ -242,7 +241,7 @@ public class InputManager : Singleton<InputManager>
         else if (other.gameObject.CompareTag("Money"))
         {
             int PlusMoney = Random.Range(1, 10);
-            PlayerManager.instance.playerStat.Gold += PlusMoney;
+            PlayerManager.instance.Gold += PlusMoney;
             Destroy(other.gameObject);
         }
     }

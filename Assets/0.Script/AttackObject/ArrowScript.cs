@@ -16,14 +16,12 @@ public class ArrowScript : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.Instance.gameObject.transform.localScale.x <= 0)
-        {
+        float direction = InputManager.Instance.gameObject.transform.localScale.x;
+        if (direction <= 0)
             RightArrow();
-        }
-        else if (InputManager.Instance.gameObject.transform.localScale.x >= 0)
-        {
-            LeftAtrow();
-        }
+        else
+            LeftArrow();
+        
     }
 
     public void RightArrow()
@@ -32,7 +30,7 @@ public class ArrowScript : MonoBehaviour
         Invoke("Stop",0.5f);
     }
 
-    public void LeftAtrow()
+    public void LeftArrow()
     {
         sp.flipX = true;
         gameObject.transform.Translate(-10*speed*Time.deltaTime,0,0);
@@ -55,7 +53,7 @@ public class ArrowScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Monster"))
         {
-            int damege = PlayerManager.Instance.playerStat.Att;
+            int damege = PlayerManager.Instance.Att;
             LV1_Monster monsterScript = other.collider.GetComponent<LV1_Monster>();
             monsterScript.TakeDamage(damege);
             InputManager.Instance.ArrowBtn.SetActive(true);

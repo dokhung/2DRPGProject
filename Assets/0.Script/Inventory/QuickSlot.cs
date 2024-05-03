@@ -16,6 +16,7 @@ public class QuickSlot : MonoBehaviour
 
         icon.sprite = slot.Sprite;
         count.text = $"{slot.Count}";
+        Debug.Log("갯수 : " +  slot.Count);
 
         if(slot.Count == 0)
         {

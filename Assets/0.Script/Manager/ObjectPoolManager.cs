@@ -13,8 +13,6 @@ public class ObjectPoolManager : MonoBehaviour
     public GameObject MonsterPrefab;
     public Transform monsterParent;
 
-    public GameObject BigMonsterPrefab;
-
     [Header("NeedMonsterCount")] 
     [SerializeField]
     private int MonsterpoolCount = 5;
@@ -22,11 +20,8 @@ public class ObjectPoolManager : MonoBehaviour
     private int poolBigSize = 2;
 
     private List<GameObject> objectPool = new List<GameObject>();
-    private List<GameObject> BigobjectPool = new List<GameObject>();
     
     [Header("Movement Parameters")]
-    public float moveSpeed = 5f;
-    public float moveInterval = 0.05f; // 움직임 인터벌
 
     private float timer;
     private SpriteRenderer sp;
@@ -41,7 +36,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     void Start()
     {
-        MonsterStat = new Monster.MonsterStat(PlayerManager.Instance.playerStat.Level);
+        MonsterStat = new Monster.MonsterStat(PlayerManager.Instance.Level);
         sp = GetComponent<SpriteRenderer>();
         for (int i = 0; i < MonsterpoolCount; i++)
         {
@@ -95,7 +90,6 @@ public class ObjectPoolManager : MonoBehaviour
             {
                 // 랜덤한 위치로 배치
                 float x = Random.Range(55f, 70f);
-                //float y = Random.Range(0f, 3f);
                 obj.transform.position = new Vector3(x, 0, 0f);
                 obj.SetActive(true);
             }

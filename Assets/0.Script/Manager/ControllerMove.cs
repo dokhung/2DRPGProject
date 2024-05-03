@@ -32,7 +32,7 @@ public class ControllerMove : MonoBehaviour
     
     // 화살을 발사한다.
     public GameObject ArrowObject;
-    // public bool AttackArrow = false;
+    
     public Transform ArrowPrefablocation;
 
     public GameObject ArrowBtn;
@@ -45,10 +45,6 @@ public class ControllerMove : MonoBehaviour
     public GameObject Sword;
     
     public bool isAttacking = false;
-    
-    
-    //범위
-    public float detectionRadius = 0.4f;
 
     private void Start()
     {
@@ -64,16 +60,14 @@ public class ControllerMove : MonoBehaviour
                 vec.x = 5;
                 transform.Translate(vec * Time.deltaTime);
                 transform.localScale = new Vector3(-1, 1, 1);
-                MoveAnim();
+                anim.SetBool("Dash",true);
                 break;
             case Dir.Left:
                 vec.x = -5;
                 transform.Translate(vec * Time.deltaTime);
                 transform.localScale = new Vector3(1, 1, 1);
-                MoveAnim();
+                anim.SetBool("Dash",true);
                 break;
-            // default: anim.SetBool("Run",false);
-            //     break;
         }
     }
     public void SetDir(Dir dir)
@@ -86,7 +80,6 @@ public class ControllerMove : MonoBehaviour
         if (JumpCount == 0)
         {
             JumpCount += 1;
-            //anim.SetTrigger("Jump");
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         }
         else
@@ -114,17 +107,11 @@ public class ControllerMove : MonoBehaviour
 
     public void E_Btn()
     {
-        if (PlayerManager.Instance.playerStat.MP > 0)
+        float mp = PlayerManager.Instance.MP;
+        float localScaleX = gameObject.transform.localScale.x;
+        if (mp > 0 && (localScaleX> 0 || localScaleX < 0))
         {
-            if (gameObject.transform.localScale.x > 0)
-            {
-                BowAttack();
-
-            }
-            else if (gameObject.transform.localScale.x < 0)
-            {
-                BowAttack();
-            } 
+            BowAttack();
         }
     }
 
@@ -162,10 +149,5 @@ public class ControllerMove : MonoBehaviour
             JumpCount = 0;
             jumpPower = 4;
         }
-    }
-
-    public void MoveAnim()
-    {
-        anim.SetBool("Dash",true);
     }
 }

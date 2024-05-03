@@ -9,10 +9,6 @@ public class ControllerButton : MonoBehaviour
 {
      public ControllerMove PlayerInputBtn;
      public Dir Right = Dir.End;
-     
-     
-
-
      public void MoveX()
      {
           PlayerInputBtn.SetDir(Right);

@@ -16,12 +16,17 @@ public class ArrowScript : MonoBehaviour
 
     void Update()
     {
+        ArrowAttack();
+    }
+
+    public void ArrowAttack()
+    {
+        // 삼향연산자로 바꿔야되는데.
         float direction = InputManager.Instance.gameObject.transform.localScale.x;
         if (direction <= 0)
             RightArrow();
         else
-            LeftArrow();
-        
+            LeftArrow(); 
     }
 
     public void RightArrow()

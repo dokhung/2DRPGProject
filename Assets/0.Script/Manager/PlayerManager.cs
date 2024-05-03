@@ -21,6 +21,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void Start()
     {
+        Debug.Log("시작 능력치가 부여되었습니다. ");
         Level = 1;
         HP = 50;
         MaxHP = 50;
@@ -42,6 +43,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         if (Exp == MaxExp || UIManager.instance.SetEXP >= UIManager.instance.SetMAXEXP)
         {
+            Debug.Log("Level Up");
             Level += 1;
             Exp = 0;
             MaxExp += 10;

@@ -19,6 +19,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject InvenToryUi;
     public GameObject InvenToryUi_Equip;
     public GameObject InvenToryUi_Etc;
+    public GameObject ETCBtn;
+    public GameObject EquipBtn;
     
     [Header("PlayerInfo")]
     public Image HP;
@@ -76,6 +78,7 @@ public class UIManager : Singleton<UIManager>
                 hp = PlayerManager.instance.HP = maxHP;
             
             HPTxt.text = hp.ToString();
+            StatHP.text = hp.ToString();
             HP.rectTransform.sizeDelta = new Vector2(((float)hp / maxHP) * 350f, 40f);
         }
     }
@@ -102,6 +105,7 @@ public class UIManager : Singleton<UIManager>
             if (mp >= maxMP)
                 mp = PlayerManager.instance.MP = maxMP;
             MPTxt.text = mp.ToString();
+            StatMP.text = mp.ToString();
             MP.rectTransform.sizeDelta = new Vector2(((float)mp / maxMP) * 350f, 40f);
 
         }
@@ -128,6 +132,7 @@ public class UIManager : Singleton<UIManager>
             if (exp >= maxexp)
                 exp = PlayerManager.instance.Exp = maxexp;
             ExpTxt.text = exp.ToString();
+            StatEXP.text = exp.ToString();
             Exp.rectTransform.sizeDelta = new Vector2(((float)exp / maxexp) * 350f, 40f);
         }
     }
@@ -210,12 +215,23 @@ public class UIManager : Singleton<UIManager>
         MenuUI(false);
         Damege.gameObject.SetActive(false);
         BeHitImage.SetActive(false);
-        OpenInventory(false);
+        InvenToryUi.SetActive(false);
+        
         
         // 시작때 1번만 적용
         HPTxt.text = SetHP.ToString();
+        MPTxt.text = SetMP.ToString();
+        ExpTxt.text = SetEXP.ToString();
+        GoldTxt.text = SetGold.ToString();
         StatHP.text = SetHP.ToString();
-        
+        StatMaxHP.text = SetMAXHP.ToString();
+        StatMP.text = SetMP.ToString();
+        StatMaxMP.text = SetMAXMP.ToString();
+        StatEXP.text = SetEXP.ToString();
+        StatMaxEXP.text = SetMAXEXP.ToString();
+        StatDEF.text = SetDef.ToString();
+        StatATT.text = SetAtt.ToString();
+        StatLV.text = SetLevel.ToString();
     }
 
 
@@ -243,8 +259,9 @@ public class UIManager : Singleton<UIManager>
             OnInvenTory_Equip = !OnInvenTory_Equip;
             InvenToryUi_Equip.SetActive(OnInvenTory_Equip);
         }
-
-        if (Input.GetKeyDown(KeyCode.S))
+        
+        //Stat
+        if (Input.GetKeyDown(KeyCode.C))
         {
             OnStat = !OnStat;
             StatUi.SetActive(OnStat);
@@ -276,11 +293,29 @@ public class UIManager : Singleton<UIManager>
         MenuUi.SetActive(isShow);
     }
 
-    public void OpenInventory(bool isShow)
+    public void InventoryUi(bool isShow)
     {
         InvenToryUi.SetActive(isShow);
     }
-
+    public void OpenETCInventory(bool isShow)
+    {
+        InvenToryUi_Etc.SetActive(isShow);
+        if (!isShow)
+        {
+            EquipBtn.SetActive(false);
+            ETCBtn.SetActive(false);
+        }
+    }
+    
+    public void OpenEquipInventory(bool isShow)
+    {
+        InvenToryUi_Equip.SetActive(isShow);
+        if (!isShow)
+        {
+            EquipBtn.SetActive(false);
+            ETCBtn.SetActive(false);
+        }
+    }
 
     public void OpenEquip()
     {

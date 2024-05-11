@@ -11,11 +11,11 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     [Header("UiList")]
-    public GameObject ShopUi;
-    public GameObject StatUi;
-    public GameObject EquipmentUi;
-    public GameObject SkillUi;
-    public GameObject MenuUi;
+    // public GameObject ShopUi;
+    // public GameObject StatUi;
+    // public GameObject EquipmentUi;
+    // public GameObject SkillUi;
+    // public GameObject MenuUi;
     public GameObject InvenToryUi;
     public GameObject InvenToryUi_Equip;
     public GameObject InvenToryUi_Etc;
@@ -104,8 +104,7 @@ public class UIManager : Singleton<UIManager>
             int maxMP = PlayerManager.instance.MaxMP;
             if (mp >= maxMP)
                 mp = PlayerManager.instance.MP = maxMP;
-            MPTxt.text = mp.ToString();
-            StatMP.text = mp.ToString();
+            // StatMP.text = mp.ToString();
             MP.rectTransform.sizeDelta = new Vector2(((float)mp / maxMP) * 350f, 40f);
 
         }
@@ -208,30 +207,26 @@ public class UIManager : Singleton<UIManager>
 
     private void Start()
     {
-        StatUI(false);
-        ShopUI(false);
-        EquipmentUI(false);
-        SkillUI(false);
-        MenuUI(false);
+        // StatUI(false);
+        // ShopUI(false);
+        // EquipmentUI(false);
+        // SkillUI(false);
+        // MenuUI(false);
         Damege.gameObject.SetActive(false);
         BeHitImage.SetActive(false);
         InvenToryUi.SetActive(false);
         
         
         // 시작때 1번만 적용
-        HPTxt.text = SetHP.ToString();
-        MPTxt.text = SetMP.ToString();
-        ExpTxt.text = SetEXP.ToString();
-        GoldTxt.text = SetGold.ToString();
-        StatHP.text = SetHP.ToString();
-        StatMaxHP.text = SetMAXHP.ToString();
-        StatMP.text = SetMP.ToString();
-        StatMaxMP.text = SetMAXMP.ToString();
-        StatEXP.text = SetEXP.ToString();
-        StatMaxEXP.text = SetMAXEXP.ToString();
-        StatDEF.text = SetDef.ToString();
-        StatATT.text = SetAtt.ToString();
-        StatLV.text = SetLevel.ToString();
+        // StatHP.text = SetHP.ToString();
+        // StatMaxHP.text = SetMAXHP.ToString();
+        // StatMP.text = SetMP.ToString();
+        // StatMaxMP.text = SetMAXMP.ToString();
+        // StatEXP.text = SetEXP.ToString();
+        // StatMaxEXP.text = SetMAXEXP.ToString();
+        // StatDEF.text = SetDef.ToString();
+        // StatATT.text = SetAtt.ToString();
+        // StatLV.text = SetLevel.ToString();
     }
 
 
@@ -261,37 +256,37 @@ public class UIManager : Singleton<UIManager>
         }
         
         //Stat
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            OnStat = !OnStat;
-            StatUi.SetActive(OnStat);
-        }
+        // if (Input.GetKeyDown(KeyCode.C))
+        // {
+        //     OnStat = !OnStat;
+        //     StatUi.SetActive(OnStat);
+        // }
     }
 
-    public void ShopUI(bool isShow)
-    {
-        ShopUi.SetActive(isShow); 
-    }
-
-    public void StatUI(bool isShow)
-    {
-        StatUi.SetActive(isShow);
-    }
-
-    public void EquipmentUI(bool isShow)
-    {
-        EquipmentUi.SetActive(isShow);
-    }
-
-    public void SkillUI(bool isShow)
-    {
-        SkillUi.SetActive(isShow);
-    }
-
-    public void MenuUI(bool isShow)
-    {
-        MenuUi.SetActive(isShow);
-    }
+    // public void ShopUI(bool isShow)
+    // {
+    //     ShopUi.SetActive(isShow); 
+    // }
+    //
+    // public void StatUI(bool isShow)
+    // {
+    //     StatUi.SetActive(isShow);
+    // }
+    //
+    // public void EquipmentUI(bool isShow)
+    // {
+    //     EquipmentUi.SetActive(isShow);
+    // }
+    //
+    // public void SkillUI(bool isShow)
+    // {
+    //     SkillUi.SetActive(isShow);
+    // }
+    //
+    // public void MenuUI(bool isShow)
+    // {
+    //     MenuUi.SetActive(isShow);
+    // }
 
     public void InventoryUi(bool isShow)
     {

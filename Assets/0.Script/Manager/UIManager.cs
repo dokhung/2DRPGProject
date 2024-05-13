@@ -11,7 +11,8 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     [Header("UiList")]
-    // public GameObject ShopUi;
+    public GameObject ShopDialog;
+    public GameObject SkillDialog;
     // public GameObject StatUi;
     // public GameObject EquipmentUi;
     // public GameObject SkillUi;
@@ -21,6 +22,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject InvenToryUi_Etc;
     public GameObject ETCBtn;
     public GameObject EquipBtn;
+    
     
     [Header("PlayerInfo")]
     public Image HP;
@@ -208,7 +210,8 @@ public class UIManager : Singleton<UIManager>
     private void Start()
     {
         // StatUI(false);
-        // ShopUI(false);
+        ShopDialog.SetActive(false);
+        SkillDialog.SetActive(false);
         // EquipmentUI(false);
         // SkillUI(false);
         // MenuUI(false);
@@ -263,11 +266,15 @@ public class UIManager : Singleton<UIManager>
         // }
     }
 
-    // public void ShopUI(bool isShow)
-    // {
-    //     ShopUi.SetActive(isShow); 
-    // }
-    //
+    public void CallShopUI(bool isShow)
+    {
+        ShopDialog.SetActive(isShow); 
+    }
+
+    public void CallSkillUI(bool isShow)
+    {
+        SkillDialog.SetActive(isShow);
+    }
     // public void StatUI(bool isShow)
     // {
     //     StatUi.SetActive(isShow);

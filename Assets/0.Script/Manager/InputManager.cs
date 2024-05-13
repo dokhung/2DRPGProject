@@ -43,7 +43,6 @@ public class InputManager : Singleton<InputManager>
     public float detectionRadius = 0.4f;
     // 피격
     public GameObject HeadColor;
-    //private SpriteRenderer HeadCol;
     
     
     
@@ -56,7 +55,6 @@ public class InputManager : Singleton<InputManager>
         sp = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         BowBody.SetActive(false);
-        //HeadCol = HeadColor.gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Update()

@@ -13,7 +13,10 @@ public class UIManager : Singleton<UIManager>
     [Header("UiList")]
     public GameObject ShopDialog;
     public GameObject SkillDialog;
-    // public GameObject StatUi;
+    public GameObject StatInfoDialog;
+    public GameObject StatInfo_Present;
+
+    public GameObject SkillInfoDialog_archers;
     // public GameObject EquipmentUi;
     // public GameObject SkillUi;
     // public GameObject MenuUi;
@@ -209,15 +212,14 @@ public class UIManager : Singleton<UIManager>
         // StatUI(false);
         ShopDialog.SetActive(false);
         SkillDialog.SetActive(false);
-        // EquipmentUI(false);
-        // SkillUI(false);
-        // MenuUI(false);
         Damege.gameObject.SetActive(false);
         BeHitImage.SetActive(false);
         InvenToryUi_Etc.SetActive(false);
         InvenToryUi_Equip.SetActive(false);
         EtcBtn.SetActive(false);
         EquipBtn.SetActive(false);
+        StatInfoDialog.SetActive(false);
+        SkillInfoDialog_archers.SetActive(false);
         
         
         // 시작때 1번만 적용
@@ -232,6 +234,7 @@ public class UIManager : Singleton<UIManager>
         // StatLV.text = SetLevel.ToString();
     }
 
+    #region Update
 
     private void Update()
     {
@@ -265,6 +268,9 @@ public class UIManager : Singleton<UIManager>
         //     StatUi.SetActive(OnStat);
         // }
     }
+
+    #endregion
+    
 
     public void CallShopUI(bool isShow)
     {
@@ -314,6 +320,20 @@ public class UIManager : Singleton<UIManager>
         OnInvenTory_Equip = false;
     }
 
+    public void CallStatInfoUI(bool isShow)
+    {
+        StatInfoDialog.SetActive(isShow);
+    }
+
+    public void CallStatInfo_PresentUI(bool isShow)
+    {
+        StatInfo_Present.SetActive(isShow);
+    }
+
+    public void SkillInfoDialog_archersUI(bool isShow)
+    {
+        SkillInfoDialog_archers.SetActive(isShow);
+    }
     public void PlayerBeHitDamege(int damage)
     {
         BeHitImage.SetActive(true);

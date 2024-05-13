@@ -17,10 +17,9 @@ public class UIManager : Singleton<UIManager>
     // public GameObject EquipmentUi;
     // public GameObject SkillUi;
     // public GameObject MenuUi;
-    public GameObject InvenToryUi;
     public GameObject InvenToryUi_Equip;
     public GameObject InvenToryUi_Etc;
-    public GameObject ETCBtn;
+    public GameObject EtcBtn;
     public GameObject EquipBtn;
     
     
@@ -57,8 +56,6 @@ public class UIManager : Singleton<UIManager>
     public GameObject BeHitImage;
     
     //Get Money is Message
-
-    private bool OnInvenTory = false;
     private bool OnInvenTory_Equip = false;
     private bool OnInvenTory_Etc = false;
     private bool OnStat = false;
@@ -217,7 +214,10 @@ public class UIManager : Singleton<UIManager>
         // MenuUI(false);
         Damege.gameObject.SetActive(false);
         BeHitImage.SetActive(false);
-        InvenToryUi.SetActive(false);
+        InvenToryUi_Etc.SetActive(false);
+        InvenToryUi_Equip.SetActive(false);
+        EtcBtn.SetActive(false);
+        EquipBtn.SetActive(false);
         
         
         // 시작때 1번만 적용
@@ -247,8 +247,8 @@ public class UIManager : Singleton<UIManager>
         // ETC_Inventory
         if (Input.GetKeyDown(KeyCode.I))
         {
-            OnInvenTory = !OnInvenTory;
-            InvenToryUi.SetActive(OnInvenTory);
+            OnInvenTory_Etc = !OnInvenTory_Etc;
+            InvenToryUi_Etc.SetActive(OnInvenTory_Etc);
         }
         
         // Equip_Inventory
@@ -275,47 +275,26 @@ public class UIManager : Singleton<UIManager>
     {
         SkillDialog.SetActive(isShow);
     }
-    // public void StatUI(bool isShow)
-    // {
-    //     StatUi.SetActive(isShow);
-    // }
-    //
-    // public void EquipmentUI(bool isShow)
-    // {
-    //     EquipmentUi.SetActive(isShow);
-    // }
-    //
-    // public void SkillUI(bool isShow)
-    // {
-    //     SkillUi.SetActive(isShow);
-    // }
-    //
-    // public void MenuUI(bool isShow)
-    // {
-    //     MenuUi.SetActive(isShow);
-    // }
 
-    public void InventoryUi(bool isShow)
-    {
-        InvenToryUi.SetActive(isShow);
-    }
-    public void OpenETCInventory(bool isShow)
+    public void CallInventory_EtcUI(bool isShow)
     {
         InvenToryUi_Etc.SetActive(isShow);
+        EquipBtn.SetActive(true);
+        EtcBtn.SetActive(true);
         if (!isShow)
         {
             EquipBtn.SetActive(false);
-            ETCBtn.SetActive(false);
+            EtcBtn.SetActive(false);
         }
     }
     
-    public void OpenEquipInventory(bool isShow)
+    public void CallInventory_EquipUI(bool isShow)
     {
         InvenToryUi_Equip.SetActive(isShow);
         if (!isShow)
         {
             EquipBtn.SetActive(false);
-            ETCBtn.SetActive(false);
+            EtcBtn.SetActive(false);
         }
     }
 

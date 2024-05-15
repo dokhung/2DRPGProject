@@ -17,6 +17,12 @@ public class UIManager : Singleton<UIManager>
     public GameObject StatInfo_Present;
 
     public GameObject SkillInfoDialog_archers;
+
+    public GameObject QuestDialog;
+
+    public GameObject HomeDialog;
+
+    public GameObject EquipDialog;
     // public GameObject EquipmentUi;
     // public GameObject SkillUi;
     // public GameObject MenuUi;
@@ -24,6 +30,13 @@ public class UIManager : Singleton<UIManager>
     public GameObject InvenToryUi_Etc;
     public GameObject EtcBtn;
     public GameObject EquipBtn;
+    
+    [Header("GameStopControl")]
+    public GameObject STOPButton;
+    public Sprite StartImg;
+    public Sprite StopImg;
+    public bool GamePlay = true;
+    private Image StopButtonImg;
     
     
     [Header("PlayerInfo")]
@@ -220,18 +233,8 @@ public class UIManager : Singleton<UIManager>
         EquipBtn.SetActive(false);
         StatInfoDialog.SetActive(false);
         SkillInfoDialog_archers.SetActive(false);
-        
-        
-        // 시작때 1번만 적용
-        // StatHP.text = SetHP.ToString();
-        // StatMaxHP.text = SetMAXHP.ToString();
-        // StatMP.text = SetMP.ToString();
-        // StatMaxMP.text = SetMAXMP.ToString();
-        // StatEXP.text = SetEXP.ToString();
-        // StatMaxEXP.text = SetMAXEXP.ToString();
-        // StatDEF.text = SetDef.ToString();
-        // StatATT.text = SetAtt.ToString();
-        // StatLV.text = SetLevel.ToString();
+        EquipDialog.SetActive(false);
+        StopButtonImg = STOPButton.GetComponent<Image>();
     }
 
     #region Update
@@ -304,6 +307,16 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void CallQuestUI(bool isShow)
+    {
+        QuestDialog.SetActive(isShow);
+    }
+
+    public void CallHomeUI(bool isShow)
+    {
+        HomeDialog.SetActive(isShow);
+    }
+
     public void OpenEquip()
     {
         InvenToryUi_Equip.SetActive(true);
@@ -334,6 +347,11 @@ public class UIManager : Singleton<UIManager>
     {
         SkillInfoDialog_archers.SetActive(isShow);
     }
+
+    public void CallEquipUI(bool isShow)
+    {
+        EquipDialog.SetActive(isShow);
+    }
     public void PlayerBeHitDamege(int damage)
     {
         BeHitImage.SetActive(true);
@@ -343,7 +361,25 @@ public class UIManager : Singleton<UIManager>
         Damege.gameObject.SetActive(true);
         OnDamege = true;
     }
-    
+
+    public void GameTimeControl()
+    {
+        // 재생중이면 트루
+        // 정지중이면 펄스
+        if (!GamePlay)
+        {
+            GamePlay = true;
+            Time.timeScale = 0;
+            StopButtonImg.sprite = StartImg;
+            
+        }
+        else
+        {
+            GamePlay = false;
+            Time.timeScale = 1;
+            StopButtonImg.sprite = StopImg;
+        }
+    }
     public void PlayerBeHitDamegeTime()
     {
         Damege.gameObject.SetActive(false);

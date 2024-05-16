@@ -15,21 +15,23 @@ public class UIManager : Singleton<UIManager>
     public GameObject SkillDialog;
     public GameObject StatInfoDialog;
     public GameObject StatInfo_Present;
-
     public GameObject SkillInfoDialog_archers;
-
     public GameObject QuestDialog;
-
     public GameObject HomeDialog;
-
     public GameObject EquipDialog;
-    // public GameObject EquipmentUi;
-    // public GameObject SkillUi;
-    // public GameObject MenuUi;
     public GameObject InvenToryUi_Equip;
     public GameObject InvenToryUi_Etc;
     public GameObject EtcBtn;
     public GameObject EquipBtn;
+    
+    [Header("HomeDialogList")]
+    public GameObject SaveSuccessDialog;
+    public GameObject ExitDialog;
+    public GameObject LoadDialog;
+    public GameObject Load_SeletedDialog;
+    public GameObject SoundSettingDialog;
+    public Slider SoundBar;
+    public Text SoundBarNumber;
     
     [Header("GameStopControl")]
     public GameObject STOPButton;

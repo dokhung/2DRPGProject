@@ -105,6 +105,11 @@ public class InputManager : Singleton<InputManager>
             rigid.AddForce(Vector2.right * 10,ForceMode2D.Impulse);
             UIManager.Instance.SetMP -= 2;
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            rigid.AddForce(Vector2.left * 10,ForceMode2D.Impulse);
+            UIManager.Instance.SetMP -= 2;
+        }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             E_Btn();

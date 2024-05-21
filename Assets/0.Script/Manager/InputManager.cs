@@ -182,7 +182,7 @@ public class InputManager : Singleton<InputManager>
         foreach (Collider2D collider in colliders)
         {
             // 몬스터만 가져옴
-            LV1_Monster monsterScript = collider.GetComponent<LV1_Monster>();
+            Slime monsterScript = collider.GetComponent<Slime>();
             // 레벨1의 몬스터가 있을때 
             // 차후 모든 몬스터의 경우로 수정하고자 합니다.
             if (monsterScript != null)

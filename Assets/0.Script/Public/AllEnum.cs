@@ -28,12 +28,10 @@ public class AllEnum : MonoBehaviour
     }
     
 
-    public enum State
+    public enum BTNodeState
     {
         Idle,
-        BeShot,
-        Attack,
-        Trace,
+        Running,
         
         
         None

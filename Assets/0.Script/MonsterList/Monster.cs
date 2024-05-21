@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Monster : MonoBehaviour
 {
-    private AllEnum.State State = AllEnum.State.None;
+    private AllEnum.BTNodeState State = AllEnum.BTNodeState.None;
     
     // 일반
     public struct MonsterStat

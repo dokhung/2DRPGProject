@@ -42,9 +42,9 @@ GameObject:
   - component: {fileID: 6569948938028675143}
   - component: {fileID: 1190227092505130871}
   - component: {fileID: 5157328877787648234}
-  - component: {fileID: 369908139300394858}
   - component: {fileID: 5030721742764384587}
   - component: {fileID: 5904981753361892705}
+  - component: {fileID: 2022887740642094299}
   m_Layer: 6
   m_Name: Slime
   m_TagString: Monster
@@ -142,30 +142,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &369908139300394858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4665097610437794062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f5719856ddf6403388551efd013a56d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  monsterDamageText: {fileID: 2133569750416565558}
-  deadAnimation: {fileID: 4665097610437794062}
-  animator: {fileID: 5904981753361892705}
-  dropItems:
-  - {fileID: 8579137990862720902, guid: 36efd8966aad34a45ae35992cd8a2afe, type: 3}
-  - {fileID: 7735923311843821924, guid: ba0d19e048c43fe4182c8a1833b690de, type: 3}
-  - {fileID: 7613028717321757411, guid: 78abfdb485f2f254796985cba2767384, type: 3}
-  - {fileID: 9203171725828614590, guid: 5bf77997309b94b6ea477c24dfd28548, type: 3}
-  - {fileID: 2820759512042349853, guid: ecc773d222d1d417dbf8df543e81440d, type: 3}
-  - {fileID: 451546091712959422, guid: efdae0057a2414546864ba1e1b5f67df, type: 3}
-  - {fileID: 7626265200828424869, guid: 6250de48c1b801549a91e5b295d37ce2, type: 3}
-  initialPosition: {fileID: 5764283895237934990}
 --- !u!61 &5030721742764384587
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -213,6 +189,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2022887740642094299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665097610437794062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea4f3371085c4f1cb727a0bc30973f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nomalmonsterai: 0
+  anime: {fileID: 5904981753361892705}
+  isInRange: 0
+  Fight: 0
+  isSuspicious: 0
+  monsterDamageText: {fileID: 2133569750416565558}
+  dropItems: []
+  initialPosition: {fileID: 5764283895237934990}
 --- !u!1 &8307458464214295624
 GameObject:
   m_ObjectHideFlags: 0

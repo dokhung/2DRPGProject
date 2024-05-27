@@ -30,9 +30,7 @@ public class AllEnum : MonoBehaviour
 
     public enum NomalMonsterStateBT
     {
-        State_Idle, // 중지
-        State_Move,
-        State,Jump,
+        State_Idle, // 재자리 좌우 보면서 순찰
         State_Guard, // 경계순찰
         State_Combat, // 공격
         State_Chase, // 추적

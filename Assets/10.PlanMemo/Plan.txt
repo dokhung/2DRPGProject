@@ -3,3 +3,5 @@
 2024 05 13일 MailUI
 2024 05 13일 pm 07시 인벤토리UI
 2024 05 13일 pm 08:48 스탯UI
+2024 05 20일 NomalMonsterAI
+2024 05 27일 am 02:49 NomalMonsterAI

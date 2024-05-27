@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -17,6 +18,10 @@ public class NomalMonsterAI : Monster
     public AllEnum.NomalMonsterStateBT nomalmonsterai = AllEnum.NomalMonsterStateBT.State_Idle;
     public Animator anime;
     
+    //코루틴
+    private Coroutine idleCoroutine;
+    private Coroutine guardCoroutine;
+    
     
     //범위
     private Vector2 Destination;
@@ -30,9 +35,11 @@ public class NomalMonsterAI : Monster
     public bool isInRange = false;
     public bool Fight = false;
     public bool isSuspicious = false; // 수상함
+    public int IdleCount = 0;
+    public bool TrueMove = false;
+    public int GuardCount = 0;
     
-    //타이밍
-    public float flipInterval = 10.0f;
+    
     
     //데미지 스킨
     public TMP_Text monsterDamageText;
@@ -47,8 +54,10 @@ public class NomalMonsterAI : Monster
     // 몬스터 정보
     private SpriteRenderer spriteRenderer;
     private Monster.MonsterStat monsterStat;
-    private float MoveSpeed = 2f;
-
+    
+    // 이동 관련 변수
+    private float MoveSpeed = 1f;
+    private float MovePoint = 0f;
     private void Start()
     {
         monsterDamageText.transform.position = initialPosition.transform.position;
@@ -95,6 +104,7 @@ public class NomalMonsterAI : Monster
         }
     }
 
+    // 해당 함수로 상태를 변경시킴
     private void ChangeState(AllEnum.NomalMonsterStateBT newState)
     {
         nomalmonsterai = newState;
@@ -120,19 +130,26 @@ public class NomalMonsterAI : Monster
     
     public void Idle() // 재자리 경계
     {
-        StartCoroutine(LookMove());
-
+        //플레이어가 범위에 없는동안 무한 코투린Idle 상태
+        if (!isInRange)
+        {
+            // 3초에 왼쪽 오른쪽
+            if (idleCoroutine == null)
+            {
+                idleCoroutine = StartCoroutine(IdleTimeState());
+            }  
+        }
     }
     public void Guard() // 경계 이동
     {
-        Debug.Log("Grard");
-        if (isSuspicious)
+        switch (isInRange)
         {
-            SearchForTarget();
-        }
-        else
-        {
-            Patrol();
+           case true :
+               ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+               break;
+           case false :
+               MoveGuard();
+               break;
         }
     }
     public void Combat() // 배틀
@@ -143,7 +160,6 @@ public class NomalMonsterAI : Monster
             Debug.Log("플레이어를 공격할수있는 공격범위내에 들어갔습니다");
             if (Fight)
             {
-                Debug.Log("공격이 시작되었습니다. 몬스터의 공격함수가 실행됩니다.");
                 NomalAttack();
             }
             else
@@ -163,9 +179,55 @@ public class NomalMonsterAI : Monster
         anime.SetTrigger("Death");
     }
 
+    public void MoveGuard()
+    {
+        int MoveNumber_PMin = Random.Range(5, 10);
+        int MoveNumber_PMax = Random.Range(11, 20);
+        int MoveNumber_MMin = Random.Range(-5, -10);
+        int MoveNumber_MMax = Random.Range(-11, -20);
+        
+        int ChangeInt = Random.Range(3, 6);
+        switch (TrueMove)
+        {
+            case true :
+                GuardCount += 1;
+                spriteRenderer.flipX = true;
+                anime.SetTrigger("Run");
+                MovePoint += MoveSpeed * Time.deltaTime;
+                transform.Translate(MoveSpeed * Time.deltaTime,0,0);
+                if (MovePoint >= Random.Range(MoveNumber_PMin,MoveNumber_PMax))
+                {
+                    Debug.Log("이동 변경");
+                    TrueMove = false;
+                    
+                }
+                break;
+            case false :
+                GuardCount += 1;
+                spriteRenderer.flipX = false;
+                anime.SetTrigger("Run");
+                MovePoint -= MoveSpeed * Time.deltaTime;
+                transform.Translate(-MoveSpeed * Time.deltaTime,0,0);
+                if (MovePoint <= Random.Range(MoveNumber_MMin,MoveNumber_MMax))
+                {
+                    Debug.Log("이동 변경");
+                    TrueMove = true;
+                }
+                break;
+        }
+        Debug.Log("ChangeInt :: "+ChangeInt);
+        if (GuardCount >= ChangeInt)
+        {
+            Debug.Log("이동거리 충분 완료");
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
+            GuardCount = 0;
+            Debug.Log("GuardCount초기화완료");
+        }
+    }
+
     public void NomalAttack()
     {
-       Debug.Log("일반공격");
+        
     }
 
     public void Patrol()
@@ -173,27 +235,53 @@ public class NomalMonsterAI : Monster
         Debug.Log("Patrol");
     }
 
-    IEnumerator LookMove()
+    
+
+    IEnumerator IdleTimeState()
     {
         while (true)
         {
+            if (IdleCount >= Random.Range(3,6))
+            {
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
+                IdleCount = 0;
+                Debug.Log("Idle초기화");
+                yield break;  // 현재 코루틴을 종료합니다.
+            }
+            // 3초마다 행동 변경
+            yield return new WaitForSeconds(3f);
             // flipX 속성 반전
             spriteRenderer.flipX = !spriteRenderer.flipX;
-            // 지정한 시간 동안 대기
-            yield return new WaitForSeconds(flipInterval);
+            // 행동을 한 후 cnt 증가
+            IdleCount += 1;
         }
     }
-
-    public void SearchForTarget()
+    // public void SearchForTarget()
+    // {
+    //     Debug.Log("SearchForTarget");
+    //     Destination = GameObject.FindGameObjectWithTag("Player")
+    //         .transform.position;
+    //     Distance = Vector2.Distance(gameObject.transform.position,
+    //         Destination);
+    //     if (Distance < 10)
+    //     {
+    //         Debug.Log("Combat");
+    //         ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+    //     }
+    // }
+    
+    public void TakeDamege(int damege)
     {
-        Debug.Log("SearchForTarget");
-        Destination = GameObject.FindGameObjectWithTag("Player")
-            .transform.position;
-        Distance = Vector2.Distance(gameObject.transform.position,
-            Destination);
-        if (Distance < 10)
+        monsterDamageText.gameObject.SetActive(true);
+        anime.SetTrigger("Hit");
+        monsterStat.hp -= damege;
+        monsterDamageText.text = damege.ToString();
+        monsterDamageText.transform.position = initialPosition.transform.position;
+        monsterDamageText.transform.DOMoveY(1, 1).SetRelative();
+        Invoke("ResetDamageText", 1f);
+        if (monsterStat.hp <= 0)
         {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+            DropItems();
         }
     }
     
@@ -206,5 +294,7 @@ public class NomalMonsterAI : Monster
         anime.SetBool("Death", true);
         Invoke("Die", 1f);
     }
+    
+    
     
 }

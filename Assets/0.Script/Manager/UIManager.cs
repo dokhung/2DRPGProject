@@ -94,8 +94,8 @@ public class UIManager : Singleton<UIManager>
             if (hp >= maxHP)
                 hp = PlayerManager.instance.HP = maxHP;
             
-            HPTxt.text = hp.ToString();
-            StatHP.text = hp.ToString();
+            // HPTxt.text = hp.ToString();
+            // StatHP.text = hp.ToString();
             HP.rectTransform.sizeDelta = new Vector2(((float)hp / maxHP) * 350f, 40f);
         }
     }

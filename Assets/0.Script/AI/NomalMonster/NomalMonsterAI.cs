@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 using Random = UnityEngine.Random;
 
 public class NomalMonsterAI : Monster
@@ -17,8 +15,10 @@ public class NomalMonsterAI : Monster
     private Vector2 Destination;
     private float Distance;
 
-    private Vector2 FindPlayer;
+    private Transform playerTransform;
     public float searchRange = 10f;
+    public float attackRange = 5f;
+    public float chaseSpeed = 3f;
 
     public bool isInRange = false;
     public bool Fight = false;
@@ -47,9 +47,8 @@ public class NomalMonsterAI : Monster
         rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         MoveSpeed = Random.Range(1f, 3f);
-        nomalmonsterai = (Random.value > 0.5f) ? AllEnum.NomalMonsterStateBT.State_Idle : AllEnum.NomalMonsterStateBT.State_Guard;
-        Debug.Log($"Initial state: {nomalmonsterai}");
-        OnBehaviors();
+
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void OnEnable()
@@ -65,6 +64,7 @@ public class NomalMonsterAI : Monster
     private void Update()
     {
         OnBehaviors();
+        CheckPlayerDistance();
     }
 
     private void OnBehaviors()
@@ -111,6 +111,26 @@ public class NomalMonsterAI : Monster
         }
     }
 
+    private void CheckPlayerDistance()
+    {
+        Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, searchRange, LayerMask.GetMask("Player"));
+        isInRange = playerCollider != null;
+
+        if (isInRange)
+        {
+            Debug.Log("isInRange");
+            Distance = Vector2.Distance(transform.position, playerTransform.position);
+            if (Distance <= attackRange)
+            {
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat); 
+            }
+            else
+            {
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
+            }
+        }
+    }
+
     public void IdleNode()
     {
         Idle();
@@ -135,15 +155,15 @@ public class NomalMonsterAI : Monster
     {
         switch (isInRange)
         {
-           case false :
-               if (idleCoroutine == null)
-               {
-                   idleCoroutine = StartCoroutine(IdleTimeState());
-               }
-               break;
-           case true :
-               ChangeState(AllEnum.NomalMonsterStateBT.State_Combat); 
-               break;
+            case false:
+                if (idleCoroutine == null)
+                {
+                    idleCoroutine = StartCoroutine(IdleTimeState());
+                }
+                break;
+            case true:
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+                break;
         }
     }
 
@@ -151,10 +171,10 @@ public class NomalMonsterAI : Monster
     {
         switch (isInRange)
         {
-            case false :
+            case false:
                 MoveGuard();
                 break;
-            case true :
+            case true:
                 ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
                 break;
         }
@@ -162,17 +182,14 @@ public class NomalMonsterAI : Monster
 
     public void Combat()
     {
-        Debug.Log("Combat");
-        if (isInRange)
+        if (Distance > attackRange)
         {
-            Debug.Log("플레이어를 공격할수있는 공격범위내에 들어갔습니다");
-            if (Fight)
+            Debug.Log("범위내 들어온것");
+            if (playerTransform != null)
             {
-                NomalAttack();
-            }
-            else
-            {
-                Debug.Log("마법공격가능 범위");
+                transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, chaseSpeed * Time.deltaTime);
+                anime.SetBool("Run", true);
+                Debug.Log("찾음");
             }
         }
     }
@@ -222,7 +239,7 @@ public class NomalMonsterAI : Monster
 
     public void NomalAttack()
     {
-        // Implement attack logic here
+        Debug.Log("플레이어를 공격할거임");
     }
 
     public void Patrol()
@@ -266,7 +283,7 @@ public class NomalMonsterAI : Monster
     {
         monsterDamageText.gameObject.SetActive(false);
     }
-    
+
     private void Die()
     {
         UIManager.Instance.SetEXP += monsterStat.giveExp;
@@ -288,7 +305,7 @@ public class NomalMonsterAI : Monster
     {
         monsterDamageText.gameObject.SetActive(false);
     }
-    
+
     public void Playerinvincibility()
     {
         SpriteRenderer HeadColor = InputManager.Instance.HeadColor.gameObject.GetComponent<SpriteRenderer>();

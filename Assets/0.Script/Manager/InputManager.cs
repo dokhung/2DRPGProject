@@ -181,11 +181,11 @@ public class InputManager : Singleton<InputManager>
         // 감지된 각 콜라이더의 대해서 반복문을 실행합니다.
         foreach (Collider2D collider in colliders)
         {
-            // 몬스터만 가져옴
-            Slime monsterScript = collider.GetComponent<Slime>();
+            // 일반 몬스터
+            NomalMonsterAI NomalMonster = collider.GetComponent<NomalMonsterAI>();
             // 레벨1의 몬스터가 있을때 
             // 차후 모든 몬스터의 경우로 수정하고자 합니다.
-            if (monsterScript != null)
+            if (NomalMonster != null)
             {
                 Vector3 directionToMonster = collider.transform.position - transform.position;
                 // 플레이어의 방향을 결정하고 localScal.x는 플레이어의 x스케일을 나타내며, 이 값이
@@ -209,7 +209,7 @@ public class InputManager : Singleton<InputManager>
                  if (dotProduct > 0 && anim.GetBool("SwordAttack") && !IsHit)
                  {
                      IsHit = true;
-                     monsterScript.TakeDamage(damege);
+                     NomalMonster.TakeDamage(damege);
                      Invoke("TimeHit",1.5f);
                  }
             }

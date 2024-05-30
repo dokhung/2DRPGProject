@@ -14,22 +14,14 @@ public class ObjectPoolManager : MonoBehaviour
     public Transform monsterParent;
 
     [Header("NeedMonsterCount")] 
-    [SerializeField]
-    private int MonsterpoolCount = 5;
-    [SerializeField]
-    private int poolBigSize = 2;
-
+    [SerializeField]private int MonsterpoolCount = 10;
     private List<GameObject> objectPool = new List<GameObject>();
-    
     [Header("Movement Parameters")]
-
     private float timer;
     private SpriteRenderer sp;
-
     public bool ItMonster = false;
     private Coroutine cr = null;
     public Monster.MonsterStat MonsterStat;
-    public int Level = 1;
     
     
 
@@ -62,9 +54,8 @@ public class ObjectPoolManager : MonoBehaviour
             if (obj != null)
             {
                 // 랜덤한 위치로 배치
-                float x = Random.Range(55f, 70f);
-                //float y = Random.Range(0f, 3f);
-                obj.transform.position = new Vector3(x, 0, 0f);
+                float x = Random.Range(60f, 100f);
+                obj.transform.position = new Vector2(x, 0);
                 obj.SetActive(true);
                 ItMonster = true;
             }
@@ -89,8 +80,8 @@ public class ObjectPoolManager : MonoBehaviour
             if (!obj.activeInHierarchy)
             {
                 // 랜덤한 위치로 배치
-                float x = Random.Range(55f, 70f);
-                obj.transform.position = new Vector3(x, 0, 0f);
+                float x = Random.Range(50f, 100f);
+                obj.transform.position = new Vector2(x, 0);
                 obj.SetActive(true);
             }
         }

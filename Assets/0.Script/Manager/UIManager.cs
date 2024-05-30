@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -147,8 +146,8 @@ public class UIManager : Singleton<UIManager>
             int maxexp = PlayerManager.instance.MaxExp;
             if (exp >= maxexp)
                 exp = PlayerManager.instance.Exp = maxexp;
-            ExpTxt.text = exp.ToString();
-            StatEXP.text = exp.ToString();
+            // ExpTxt.text = exp.ToString();
+            // StatEXP.text = exp.ToString();
             Exp.rectTransform.sizeDelta = new Vector2(((float)exp / maxexp) * 350f, 40f);
         }
     }

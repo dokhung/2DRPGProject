@@ -9,36 +9,33 @@ public class NomalMonsterAI : Monster
     public AllEnum.NomalMonsterStateBT nomalmonsterai;
     public Animator anime;
 
-    private Coroutine idleCoroutine;
-    private Coroutine guardCoroutine;
+    private Coroutine currentCoroutine;
 
     private Vector2 Destination;
     private float Distance;
+    
+    [SerializeField] private float searchRange = 5f;
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private float chaseSpeed = 2f;
+    private bool isInRange = false;
+    private bool isInAttackRange = false;
+    private bool isCollisionWithDoor = false;
 
-    private Transform playerTransform;
-    public float searchRange = 10f;
-    public float attackRange = 5f;
-    public float chaseSpeed = 3f;
-
-    public bool isInRange = false;
-    public bool Fight = false;
-    public bool isSuspicious = false;
-    public int IdleCount = 0;
-    public bool TrueMove = false;
-    public int GuardCount = 0;
+    private int IdleCount = 0;
+    private bool TrueMove = false;
+    private int GuardCount = 0;
 
     public TMP_Text monsterDamageText;
-
     public GameObject[] dropItems;
 
     private Rigidbody2D rigidBody;
     public Transform initialPosition;
-
     private SpriteRenderer spriteRenderer;
     private Monster.MonsterStat monsterStat;
-
     private float MoveSpeed = 0;
     private float MovePoint = 0f;
+    
+    public float detectionRadius = 1f; 
 
     private void Start()
     {
@@ -47,8 +44,6 @@ public class NomalMonsterAI : Monster
         rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         MoveSpeed = Random.Range(1f, 3f);
-
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void OnEnable()
@@ -63,25 +58,27 @@ public class NomalMonsterAI : Monster
 
     private void Update()
     {
-        OnBehaviors();
-        CheckPlayerDistance();
+        BehaviourTree();
     }
 
-    private void OnBehaviors()
+    private void BehaviourTree()
     {
         switch (nomalmonsterai)
         {
             case AllEnum.NomalMonsterStateBT.State_Idle:
-                IdleNode();
+                Idle();
                 break;
             case AllEnum.NomalMonsterStateBT.State_Guard:
-                GuardNode();
+                Guard();
                 break;
             case AllEnum.NomalMonsterStateBT.State_Combat:
-                CombatNode();
+                Combat();
                 break;
             case AllEnum.NomalMonsterStateBT.State_Chase:
-                ChaseNode();
+                Chase();
+                break;
+            case AllEnum.NomalMonsterStateBT.State_Return:
+                Return();
                 break;
         }
     }
@@ -89,25 +86,15 @@ public class NomalMonsterAI : Monster
     private void ChangeState(AllEnum.NomalMonsterStateBT newState)
     {
         nomalmonsterai = newState;
-        OnBehaviors();
-        if (!isInRange)
-        {
-            ResetCoroutines();  
-        }
+        ResetCurrentCoroutine();
     }
 
-    private void ResetCoroutines()
+    private void ResetCurrentCoroutine()
     {
-        if (idleCoroutine != null)
+        if (currentCoroutine != null)
         {
-            StopCoroutine(idleCoroutine);
-            idleCoroutine = null;
-        }
-
-        if (guardCoroutine != null)
-        {
-            StopCoroutine(guardCoroutine);
-            guardCoroutine = null;
+            StopCoroutine(currentCoroutine);
+            currentCoroutine = null;
         }
     }
 
@@ -118,136 +105,81 @@ public class NomalMonsterAI : Monster
 
         if (isInRange)
         {
-            Debug.Log("isInRange");
-            Distance = Vector2.Distance(transform.position, playerTransform.position);
-            if (Distance <= attackRange)
+            if (isInAttackRange)
             {
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat); 
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
             }
             else
             {
                 ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
             }
         }
-    }
-
-    public void IdleNode()
-    {
-        Idle();
-    }
-
-    public void GuardNode()
-    {
-        Guard();
-    }
-
-    public void CombatNode()
-    {
-        Combat();
-    }
-
-    public void ChaseNode()
-    {
-        Chase();
-    }
-
-    public void Idle()
-    {
-        switch (isInRange)
+        else
         {
-            case false:
-                if (idleCoroutine == null)
-                {
-                    idleCoroutine = StartCoroutine(IdleTimeState());
-                }
-                break;
-            case true:
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
-                break;
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
         }
     }
 
-    public void Guard()
+    private void Idle()
     {
-        switch (isInRange)
+        if (!isCollisionWithDoor)
         {
-            case false:
-                MoveGuard();
-                break;
-            case true:
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
-                break;
+            CheckPlayerDistance();
         }
-    }
-
-    public void Combat()
-    {
-        if (Distance > attackRange)
+        if (!isInRange)
         {
-            Debug.Log("범위내 들어온것");
-            if (playerTransform != null)
+            if (currentCoroutine == null)
             {
-                transform.position = Vector2.MoveTowards(transform.position, playerTransform.position, chaseSpeed * Time.deltaTime);
-                anime.SetBool("Run", true);
-                Debug.Log("찾음");
+                currentCoroutine = StartCoroutine(IdleTimeState());
             }
         }
-    }
-
-    public void Chase()
-    {
-        Debug.Log("Chase");
-    }
-
-    public void MoveGuard()
-    {
-        switch (TrueMove)
+        else
         {
-            case true:
-                spriteRenderer.flipX = true;
-                anime.SetBool("Run", true);
-                MovePoint += MoveSpeed * Time.deltaTime;
-                transform.Translate(MoveSpeed * Time.deltaTime, 0, 0);
-
-                if (MovePoint >= Random.Range(1, 10))
-                {
-                    TrueMove = false;
-                    GuardCount += 1;
-                }
-                break;
-            case false:
-                spriteRenderer.flipX = false;
-                anime.SetBool("Run", true);
-                MovePoint -= MoveSpeed * Time.deltaTime;
-                transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0);
-
-                if (MovePoint <= Random.Range(-1, -10))
-                {
-                    TrueMove = true;
-                    GuardCount += 1;
-                }
-                break;
-        }
-
-        if (GuardCount >= Random.Range(3, 5))
-        {
-            anime.SetBool("Run", false);
-            GuardCount = 0;
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
         }
     }
 
-    public void NomalAttack()
+    private void Guard()
     {
-        Debug.Log("플레이어를 공격할거임");
+        CheckPlayerDistance();
+        if (!isInRange)
+        {
+            if (currentCoroutine == null)
+            {
+                currentCoroutine = StartCoroutine(GuardMovement());
+            }
+        }
+        else
+        {
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+        }
     }
 
-    public void Patrol()
+    private void Combat()
     {
-        Debug.Log("Patrol");
+        if (isInAttackRange)
+        {
+            anime.SetBool("Run",false);
+            anime.SetTrigger("Attack");
+        }
+        else if (isInRange)
+        {
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
+        }
     }
 
-    IEnumerator IdleTimeState()
+    private void Chase()
+    {
+        // 추적
+    }
+
+
+    private void Return()
+    {
+        //추적중지
+    }
+
+    private IEnumerator IdleTimeState()
     {
         while (true)
         {
@@ -264,22 +196,66 @@ public class NomalMonsterAI : Monster
         }
     }
 
-    public void TakeDamege(int damege)
+    private IEnumerator GuardMovement()
+    {
+        while (true)
+        {
+            if (TrueMove)
+            {
+                spriteRenderer.flipX = true;
+                anime.SetBool("Run", true);
+                MovePoint += MoveSpeed * Time.deltaTime;
+                transform.Translate(MoveSpeed * Time.deltaTime, 0, 0);
+
+                if (MovePoint >= Random.Range(1, 10))
+                {
+                    TrueMove = false;
+                    GuardCount += 1;
+                }
+            }
+            else
+            {
+                spriteRenderer.flipX = false;
+                anime.SetBool("Run", true);
+                MovePoint -= MoveSpeed * Time.deltaTime;
+                transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0);
+
+                if (MovePoint <= Random.Range(-1, -10))
+                {
+                    TrueMove = true;
+                    GuardCount += 1;
+                }
+            }
+
+            if (GuardCount >= Random.Range(3, 5))
+            {
+                anime.SetBool("Run", false);
+                GuardCount = 0;
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    public void TakeDamage(int damage)
     {
         monsterDamageText.gameObject.SetActive(true);
         anime.SetTrigger("Hit");
-        monsterStat.hp -= damege;
-        monsterDamageText.text = damege.ToString();
+        monsterStat.hp -= damage;
+        monsterDamageText.text = damage.ToString();
         monsterDamageText.transform.position = initialPosition.transform.position;
         monsterDamageText.transform.DOMoveY(1, 1).SetRelative();
-        Invoke("ResetDamegeText", 1f);
+        Invoke("ResetDamageText", 1f);
+
         if (monsterStat.hp <= 0)
         {
             DropItems();
         }
     }
 
-    public void ResetDamegeText()
+    public void ResetDamageText()
     {
         monsterDamageText.gameObject.SetActive(false);
     }
@@ -287,7 +263,6 @@ public class NomalMonsterAI : Monster
     private void Die()
     {
         UIManager.Instance.SetEXP += monsterStat.giveExp;
-        // deadAnimation.SetActive(false);
         gameObject.SetActive(false);
     }
 
@@ -300,37 +275,13 @@ public class NomalMonsterAI : Monster
         anime.SetBool("Death", true);
         Invoke("Die", 1f);
     }
-
-    private void ResetDamageText()
-    {
-        monsterDamageText.gameObject.SetActive(false);
-    }
-
-    public void Playerinvincibility()
-    {
-        SpriteRenderer HeadColor = InputManager.Instance.HeadColor.gameObject.GetComponent<SpriteRenderer>();
-        HeadColor.color = Color.white;
-        InputManager.Instance.PlayerIsHit = false; 
-        InputManager.Instance.NotBehitAnim();
-    }
-
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Door1"))
         {
-            Rigidbody2D playerRigidBody = other.rigidbody;
-            Vector2 forceDirection = spriteRenderer.flipX ? new Vector2(-2, 2) : new Vector2(2, 2);
-            UIManager.Instance.SetHP -= monsterStat.att;
-            if (!UIManager.Instance.OnDamege && !InputManager.Instance.PlayerIsHit)
-            {
-                playerRigidBody.AddForce(forceDirection, ForceMode2D.Impulse);
-                InputManager.Instance.PlayerIsHit = true;
-                UIManager.Instance.PlayerBeHitDamege(monsterStat.att);
-                SpriteRenderer HeadColor = InputManager.Instance.HeadColor.gameObject.GetComponent<SpriteRenderer>();
-                HeadColor.color = Color.red;
-                InputManager.Instance.BehitAnim();
-                Invoke("Playerinvincibility",1f);
-            }
+            Debug.Log("Door1 근처에 있음. 추적 중지");
+            anime.SetBool("Run", false);
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
         }
     }
 }

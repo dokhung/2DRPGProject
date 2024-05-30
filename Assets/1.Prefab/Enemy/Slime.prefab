@@ -204,12 +204,10 @@ MonoBehaviour:
   nomalmonsterai: 0
   anime: {fileID: 5904981753361892705}
   searchRange: 10
+  attackRange: 1
+  chaseSpeed: 2
   isInRange: 0
-  Fight: 0
-  isSuspicious: 0
-  IdleCount: 0
-  TrueMove: 0
-  GuardCount: 0
+  isInAttackRange: 0
   monsterDamageText: {fileID: 2133569750416565558}
   dropItems:
   - {fileID: 7613028717321757411, guid: 78abfdb485f2f254796985cba2767384, type: 3}
@@ -219,6 +217,7 @@ MonoBehaviour:
   - {fileID: 2820759512042349853, guid: 5bf77997309b94b6ea477c24dfd28548, type: 3}
   - {fileID: 451546091712959422, guid: efdae0057a2414546864ba1e1b5f67df, type: 3}
   initialPosition: {fileID: 5764283895237934990}
+  detectionRadius: 1
 --- !u!1 &8307458464214295624
 GameObject:
   m_ObjectHideFlags: 0

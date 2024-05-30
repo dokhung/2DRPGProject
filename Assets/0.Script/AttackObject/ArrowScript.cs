@@ -59,8 +59,8 @@ public class ArrowScript : MonoBehaviour
         if (other.gameObject.CompareTag("Monster"))
         {
             int damege = PlayerManager.Instance.Att;
-            Slime monsterScript = other.collider.GetComponent<Slime>();
-            monsterScript.TakeDamage(damege);
+            NomalMonsterAI NomalMonster = other.collider.GetComponent<NomalMonsterAI>();
+            NomalMonster.TakeDamage(damege);
             InputManager.Instance.ArrowBtn.SetActive(true);
             InputManager.Instance.BowBody.SetActive(false);
             InputManager.Instance.Sword.SetActive(true);

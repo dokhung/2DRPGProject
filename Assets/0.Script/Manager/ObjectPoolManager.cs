@@ -8,6 +8,7 @@ public class ObjectPoolManager : MonoBehaviour
 {
     /*
      * 몬스터를 생성하여 사냥후 재활성화 함
+     * 몬스터가 소환될 위치를 정확히 잡아야한다.
      */
     [Header("UseMonster")]
     public GameObject MonsterPrefab;

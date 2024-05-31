@@ -15,8 +15,14 @@ public class NomalMonsterAI : Monster
     private float Distance;
     
     [SerializeField] private float searchRange = 5f;
-    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private float attackRange = 2f;
     [SerializeField] private float chaseSpeed = 2f;
+    
+    //추적
+    public float SerchPlayerRadius = 3.0f;
+    public LayerMask PlayerLayer;
+    
+    
     private bool isInRange = false;
     private bool isInAttackRange = false;
     private bool isCollisionWithDoor = false;
@@ -35,7 +41,8 @@ public class NomalMonsterAI : Monster
     private float MoveSpeed = 0;
     private float MovePoint = 0f;
     
-    public float detectionRadius = 1f; 
+    private Coroutine idleCoroutine;
+    private Coroutine guardCoroutine;
 
     private void Start()
     {
@@ -91,41 +98,59 @@ public class NomalMonsterAI : Monster
 
     private void ResetCurrentCoroutine()
     {
-        if (currentCoroutine != null)
+        if (idleCoroutine != null)
         {
-            StopCoroutine(currentCoroutine);
-            currentCoroutine = null;
+            StopCoroutine(idleCoroutine);
+            idleCoroutine = null;
+        }
+
+        if (guardCoroutine != null)
+        {
+            StopCoroutine(guardCoroutine);
+            guardCoroutine = null;
         }
     }
-
+    
+    // 플레이어 감지
+    // 플레이어를 감지하여 감지 범위인지 여부와
+    // 감지 범위일때 공격이 가능한 범위인지 판단
     private void CheckPlayerDistance()
     {
-        Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, searchRange, LayerMask.GetMask("Player"));
-        isInRange = playerCollider != null;
+        // 추격 범위 내의 플레이어 감지
+        Collider2D chaseCollider = Physics2D.OverlapCircle(transform.position, searchRange, LayerMask.GetMask("Player"));
+        // 공격 범위 내의 플레이어 감지
+        Collider2D attackCollider = Physics2D.OverlapCircle(transform.position, attackRange, LayerMask.GetMask("Player"));
+    
+        // 추격 범위 내에 플레이어가 있는지 확인
+        isInRange = chaseCollider != null;
+        // 공격 범위 내에 플레이어가 있는지 확인
+        isInAttackRange = attackCollider != null;
 
+        // 상태 변경 로직
         if (isInRange)
         {
-            if (isInAttackRange)
+            switch (isInAttackRange)
             {
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
-            }
-            else
-            {
+                case true:
+                Debug.Log("isInAttackRange = true => Combat");
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat); 
+                break;
+                case false:
+                Debug.Log("isInAttackRange = false => Chase");
                 ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
+                break;
             }
         }
         else
         {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
         }
     }
 
     private void Idle()
     {
-        if (!isCollisionWithDoor)
-        {
-            CheckPlayerDistance();
-        }
+        anime.SetBool("Run",false);
+        CheckPlayerDistance();
         if (!isInRange)
         {
             if (currentCoroutine == null)
@@ -135,7 +160,7 @@ public class NomalMonsterAI : Monster
         }
         else
         {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
         }
     }
 
@@ -151,7 +176,8 @@ public class NomalMonsterAI : Monster
         }
         else
         {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Combat);
+            Debug.Log("Guard => State_Chase");
+            ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
         }
     }
 
@@ -159,6 +185,7 @@ public class NomalMonsterAI : Monster
     {
         if (isInAttackRange)
         {
+            Debug.Log("isInAttackRange = true => Attack");
             anime.SetBool("Run",false);
             anime.SetTrigger("Attack");
         }
@@ -171,12 +198,11 @@ public class NomalMonsterAI : Monster
     private void Chase()
     {
         // 추적
+        anime.SetBool("Run",true);
     }
-
-
     private void Return()
     {
-        //추적중지
+        //추적중지하고 원래 있던 자리로 이동
     }
 
     private IEnumerator IdleTimeState()
@@ -185,14 +211,16 @@ public class NomalMonsterAI : Monster
         {
             if (IdleCount >= Random.Range(3, 6))
             {
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
+                Debug.Log("조건 달성");
                 IdleCount = 0;
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
                 yield break;
             }
 
             yield return new WaitForSeconds(3f);
             spriteRenderer.flipX = Random.value > 0.5f;
             IdleCount += 1;
+            Debug.Log(IdleCount);
         }
     }
 
@@ -207,7 +235,7 @@ public class NomalMonsterAI : Monster
                 MovePoint += MoveSpeed * Time.deltaTime;
                 transform.Translate(MoveSpeed * Time.deltaTime, 0, 0);
 
-                if (MovePoint >= Random.Range(1, 10))
+                if (MovePoint >= Random.Range(1, 20))
                 {
                     TrueMove = false;
                     GuardCount += 1;
@@ -220,7 +248,7 @@ public class NomalMonsterAI : Monster
                 MovePoint -= MoveSpeed * Time.deltaTime;
                 transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0);
 
-                if (MovePoint <= Random.Range(-1, -10))
+                if (MovePoint <= Random.Range(-1, -20))
                 {
                     TrueMove = true;
                     GuardCount += 1;

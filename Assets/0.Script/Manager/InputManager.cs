@@ -209,7 +209,7 @@ public class InputManager : Singleton<InputManager>
                  if (dotProduct > 0 && anim.GetBool("SwordAttack") && !IsHit)
                  {
                      IsHit = true;
-                     NomalMonster.TakeDamage(damege);
+                     //NomalMonster.TakeDamage(damege);
                      Invoke("TimeHit",1.5f);
                  }
             }

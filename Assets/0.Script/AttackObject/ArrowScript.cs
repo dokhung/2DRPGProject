@@ -60,7 +60,7 @@ public class ArrowScript : MonoBehaviour
         {
             int damege = PlayerManager.Instance.Att;
             NomalMonsterAI NomalMonster = other.collider.GetComponent<NomalMonsterAI>();
-            NomalMonster.TakeDamage(damege);
+            //NomalMonster.TakeDamage(damege);
             InputManager.Instance.ArrowBtn.SetActive(true);
             InputManager.Instance.BowBody.SetActive(false);
             InputManager.Instance.Sword.SetActive(true);

@@ -6,68 +6,60 @@ using Random = UnityEngine.Random;
 
 public class NomalMonsterAI : Monster
 {
+    #region 각종변수
+    //Enum
     public AllEnum.NomalMonsterStateBT nomalmonsterai;
+    //Idle상태용 변수
+    //Guard상태용 변수
+    //Combat상태용 변수
+    //Chase상태용 변수
     public Animator anime;
-
     private Coroutine currentCoroutine;
-
+    private Coroutine idleCoroutine;
+    private Coroutine guardCoroutine;
     private Vector2 Destination;
     private float Distance;
-    
     [SerializeField] private float searchRange = 5f;
     [SerializeField] private float attackRange = 2f;
-    [SerializeField] private float chaseSpeed = 2f;
-    
-    //추적
-    public float SerchPlayerRadius = 3.0f;
-    public LayerMask PlayerLayer;
-    
-    
     private bool isInRange = false;
     private bool isInAttackRange = false;
     private bool isCollisionWithDoor = false;
-
     private int IdleCount = 0;
     private bool TrueMove = false;
     private int GuardCount = 0;
-
-    public TMP_Text monsterDamageText;
-    public GameObject[] dropItems;
-
     private Rigidbody2D rigidBody;
     public Transform initialPosition;
     private SpriteRenderer spriteRenderer;
     private Monster.MonsterStat monsterStat;
     private float MoveSpeed = 0;
     private float MovePoint = 0f;
-    
-    private Coroutine idleCoroutine;
-    private Coroutine guardCoroutine;
-
+    #endregion
+    #region Start()
     private void Start()
     {
-        monsterDamageText.transform.position = initialPosition.transform.position;
-        monsterDamageText.gameObject.SetActive(false);
         rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        MoveSpeed = Random.Range(1f, 3f);
     }
-
+    #endregion
+    #region OnEnable()
     private void OnEnable()
     {
         InitializeMonsterStat();
     }
-
-    public override void InitializeMonsterStat()
+    #endregion
+    #region 몬스터스탯의 설정
+    public void InitializeMonsterStat()
     {
         monsterStat = new Monster.MonsterStat(PlayerManager.Instance.Level);
     }
-
+    #endregion
+    #region Update() : 지속적으로 트리로 인한 상태변형을 받는중
     private void Update()
     {
         BehaviourTree();
     }
-
+    #endregion
+    #region BehaviourTree() : 트리 리스트
     private void BehaviourTree()
     {
         switch (nomalmonsterai)
@@ -89,12 +81,15 @@ public class NomalMonsterAI : Monster
                 break;
         }
     }
-
+    #endregion
+    #region 실시간상태변형
     private void ChangeState(AllEnum.NomalMonsterStateBT newState)
     {
         nomalmonsterai = newState;
         ResetCurrentCoroutine();
     }
+    #endregion
+    
 
     private void ResetCurrentCoroutine()
     {
@@ -183,44 +178,31 @@ public class NomalMonsterAI : Monster
 
     private void Combat()
     {
-        if (isInAttackRange)
-        {
-            Debug.Log("isInAttackRange = true => Attack");
-            anime.SetBool("Run",false);
-            anime.SetTrigger("Attack");
-        }
-        else if (isInRange)
-        {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
-        }
+        
     }
 
     private void Chase()
     {
-        // 추적
-        anime.SetBool("Run",true);
+        
     }
     private void Return()
     {
-        //추적중지하고 원래 있던 자리로 이동
+        
     }
 
     private IEnumerator IdleTimeState()
     {
         while (true)
         {
-            if (IdleCount >= Random.Range(3, 6))
-            {
-                Debug.Log("조건 달성");
-                IdleCount = 0;
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
-                yield break;
-            }
-
             yield return new WaitForSeconds(3f);
-            spriteRenderer.flipX = Random.value > 0.5f;
+            spriteRenderer.flipX = !spriteRenderer.flipX;
             IdleCount += 1;
             Debug.Log(IdleCount);
+            if (IdleCount >= Random.Range(3,6))
+            {
+                
+                ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
+            }
         }
     }
 
@@ -264,52 +246,6 @@ public class NomalMonsterAI : Monster
             }
 
             yield return null;
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        monsterDamageText.gameObject.SetActive(true);
-        anime.SetTrigger("Hit");
-        monsterStat.hp -= damage;
-        monsterDamageText.text = damage.ToString();
-        monsterDamageText.transform.position = initialPosition.transform.position;
-        monsterDamageText.transform.DOMoveY(1, 1).SetRelative();
-        Invoke("ResetDamageText", 1f);
-
-        if (monsterStat.hp <= 0)
-        {
-            DropItems();
-        }
-    }
-
-    public void ResetDamageText()
-    {
-        monsterDamageText.gameObject.SetActive(false);
-    }
-
-    private void Die()
-    {
-        UIManager.Instance.SetEXP += monsterStat.giveExp;
-        gameObject.SetActive(false);
-    }
-
-    public override void DropItems()
-    {
-        GameObject ItemToDrop = dropItems[Random.Range(0, dropItems.Length)];
-        GameObject DroppedItem = Instantiate(ItemToDrop, transform.position, Quaternion.identity);
-        Rigidbody2D ItemRigidBody = DroppedItem.GetComponent<Rigidbody2D>();
-        ItemRigidBody.AddForce(Vector3.up * 5, ForceMode2D.Impulse);
-        anime.SetBool("Death", true);
-        Invoke("Die", 1f);
-    }
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Door1"))
-        {
-            Debug.Log("Door1 근처에 있음. 추적 중지");
-            anime.SetBool("Run", false);
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
         }
     }
 }

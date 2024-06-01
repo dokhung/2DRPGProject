@@ -205,19 +205,7 @@ MonoBehaviour:
   anime: {fileID: 5904981753361892705}
   searchRange: 10
   attackRange: 1
-  chaseSpeed: 2
-  isInRange: 0
-  isInAttackRange: 0
-  monsterDamageText: {fileID: 2133569750416565558}
-  dropItems:
-  - {fileID: 7613028717321757411, guid: 78abfdb485f2f254796985cba2767384, type: 3}
-  - {fileID: 9203171725828614590, guid: ecc773d222d1d417dbf8df543e81440d, type: 3}
-  - {fileID: 7626265200828424869, guid: 6250de48c1b801549a91e5b295d37ce2, type: 3}
-  - {fileID: 7735923311843821924, guid: ba0d19e048c43fe4182c8a1833b690de, type: 3}
-  - {fileID: 2820759512042349853, guid: 5bf77997309b94b6ea477c24dfd28548, type: 3}
-  - {fileID: 451546091712959422, guid: efdae0057a2414546864ba1e1b5f67df, type: 3}
   initialPosition: {fileID: 5764283895237934990}
-  detectionRadius: 1
 --- !u!1 &8307458464214295624
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3379219849372332669
 RectTransform:
   m_ObjectHideFlags: 0

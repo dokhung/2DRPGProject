@@ -24,12 +24,4 @@ public abstract class Monster : MonoBehaviour
             this.giveMoney = 10 * Level;
         }
     }
-
-
-
-
-    public abstract void InitializeMonsterStat();
-    public abstract void DropItems();
-    // public abstract void MonsterHPInit();
-
 }

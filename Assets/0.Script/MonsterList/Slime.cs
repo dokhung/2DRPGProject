@@ -52,7 +52,7 @@ public class Slime : Monster
         monsterDamageText.transform.position = initialPosition.transform.position;
     }
 
-    public override void InitializeMonsterStat()
+    public void InitializeMonsterStat()
     {
         monsterStat = new MonsterStat(PlayerManager.Instance.Level);
     }
@@ -164,7 +164,7 @@ public class Slime : Monster
         currentState = MonsterState.Normal;
     }
 
-    public override void DropItems()
+    public void DropItems()
     {
         GameObject ItemToDrop = dropItems[Random.Range(0, dropItems.Length)];
         GameObject DroppedItem = Instantiate(ItemToDrop, transform.position, Quaternion.identity);

@@ -6,39 +6,30 @@ using Random = UnityEngine.Random;
 
 public class NomalMonsterAI : Monster
 {
+    /*
+     * memo
+     * Collider2D chaseCollider = Physics2D.OverlapCircle(transform.position, searchRange, LayerMask.NameToLayer(("Player")));
+       // 공격 범위 내의 플레이어 감지
+       Collider2D attackCollider = Physics2D.OverlapCircle(transform.position, attackRange, LayerMask.NameToLayer(("Player")));
+     */
     #region 각종변수
     //Enum
     public AllEnum.NomalMonsterStateBT nomalmonsterai;
     //Idle상태용 변수
-    //Guard상태용 변수
-    //Combat상태용 변수
-    //Chase상태용 변수
+    private float CoolTime = 0f;
+    private bool isLook = true;
+    private float interval = 3f;
+    private float IdlelookCount = 0;
     public Animator anime;
-    private Coroutine currentCoroutine;
-    private Coroutine idleCoroutine;
-    private Coroutine guardCoroutine;
-    private Vector2 Destination;
-    private float Distance;
-    [SerializeField] private float searchRange = 5f;
-    [SerializeField] private float attackRange = 2f;
-    private bool isInRange = false;
-    private bool isInAttackRange = false;
-    private bool isCollisionWithDoor = false;
-    private int IdleCount = 0;
-    private bool TrueMove = false;
-    private int GuardCount = 0;
     private Rigidbody2D rigidBody;
-    public Transform initialPosition;
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer Sr;
     private Monster.MonsterStat monsterStat;
-    private float MoveSpeed = 0;
-    private float MovePoint = 0f;
     #endregion
     #region Start()
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        Sr = gameObject.GetComponent<SpriteRenderer>();
     }
     #endregion
     #region OnEnable()
@@ -64,20 +55,9 @@ public class NomalMonsterAI : Monster
     {
         switch (nomalmonsterai)
         {
+            //Idle :: 비전투상태
             case AllEnum.NomalMonsterStateBT.State_Idle:
                 Idle();
-                break;
-            case AllEnum.NomalMonsterStateBT.State_Guard:
-                Guard();
-                break;
-            case AllEnum.NomalMonsterStateBT.State_Combat:
-                Combat();
-                break;
-            case AllEnum.NomalMonsterStateBT.State_Chase:
-                Chase();
-                break;
-            case AllEnum.NomalMonsterStateBT.State_Return:
-                Return();
                 break;
         }
     }
@@ -86,166 +66,55 @@ public class NomalMonsterAI : Monster
     private void ChangeState(AllEnum.NomalMonsterStateBT newState)
     {
         nomalmonsterai = newState;
-        ResetCurrentCoroutine();
     }
     #endregion
-    
 
-    private void ResetCurrentCoroutine()
+    #region 비전투상태
+
+    void Idle()
     {
-        if (idleCoroutine != null)
+        Debug.Log("현재상태 :: " + (nomalmonsterai));
+        CoolTime += Time.deltaTime;
+        if (CoolTime >= interval)
         {
-            StopCoroutine(idleCoroutine);
-            idleCoroutine = null;
-        }
-
-        if (guardCoroutine != null)
-        {
-            StopCoroutine(guardCoroutine);
-            guardCoroutine = null;
-        }
-    }
-    
-    // 플레이어 감지
-    // 플레이어를 감지하여 감지 범위인지 여부와
-    // 감지 범위일때 공격이 가능한 범위인지 판단
-    private void CheckPlayerDistance()
-    {
-        // 추격 범위 내의 플레이어 감지
-        Collider2D chaseCollider = Physics2D.OverlapCircle(transform.position, searchRange, LayerMask.GetMask("Player"));
-        // 공격 범위 내의 플레이어 감지
-        Collider2D attackCollider = Physics2D.OverlapCircle(transform.position, attackRange, LayerMask.GetMask("Player"));
-    
-        // 추격 범위 내에 플레이어가 있는지 확인
-        isInRange = chaseCollider != null;
-        // 공격 범위 내에 플레이어가 있는지 확인
-        isInAttackRange = attackCollider != null;
-
-        // 상태 변경 로직
-        if (isInRange)
-        {
-            switch (isInAttackRange)
+            CoolTime = 0f;
+            if (isLook)
             {
-                case true:
-                Debug.Log("isInAttackRange = true => Combat");
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Combat); 
-                break;
-                case false:
-                Debug.Log("isInAttackRange = false => Chase");
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
-                break;
-            }
-        }
-        else
-        {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
-        }
-    }
-
-    private void Idle()
-    {
-        anime.SetBool("Run",false);
-        CheckPlayerDistance();
-        if (!isInRange)
-        {
-            if (currentCoroutine == null)
-            {
-                currentCoroutine = StartCoroutine(IdleTimeState());
-            }
-        }
-        else
-        {
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
-        }
-    }
-
-    private void Guard()
-    {
-        CheckPlayerDistance();
-        if (!isInRange)
-        {
-            if (currentCoroutine == null)
-            {
-                currentCoroutine = StartCoroutine(GuardMovement());
-            }
-        }
-        else
-        {
-            Debug.Log("Guard => State_Chase");
-            ChangeState(AllEnum.NomalMonsterStateBT.State_Chase);
-        }
-    }
-
-    private void Combat()
-    {
-        
-    }
-
-    private void Chase()
-    {
-        
-    }
-    private void Return()
-    {
-        
-    }
-
-    private IEnumerator IdleTimeState()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(3f);
-            spriteRenderer.flipX = !spriteRenderer.flipX;
-            IdleCount += 1;
-            Debug.Log(IdleCount);
-            if (IdleCount >= Random.Range(3,6))
-            {
-                
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Guard);
-            }
-        }
-    }
-
-    private IEnumerator GuardMovement()
-    {
-        while (true)
-        {
-            if (TrueMove)
-            {
-                spriteRenderer.flipX = true;
-                anime.SetBool("Run", true);
-                MovePoint += MoveSpeed * Time.deltaTime;
-                transform.Translate(MoveSpeed * Time.deltaTime, 0, 0);
-
-                if (MovePoint >= Random.Range(1, 20))
-                {
-                    TrueMove = false;
-                    GuardCount += 1;
-                }
+                LookRight();
             }
             else
             {
-                spriteRenderer.flipX = false;
-                anime.SetBool("Run", true);
-                MovePoint -= MoveSpeed * Time.deltaTime;
-                transform.Translate(-MoveSpeed * Time.deltaTime, 0, 0);
-
-                if (MovePoint <= Random.Range(-1, -20))
-                {
-                    TrueMove = true;
-                    GuardCount += 1;
-                }
+                LookLeft();
             }
 
-            if (GuardCount >= Random.Range(3, 5))
+            isLook = !isLook;
+            if (IdlelookCount >= 3)
             {
-                anime.SetBool("Run", false);
-                GuardCount = 0;
-                ChangeState(AllEnum.NomalMonsterStateBT.State_Idle);
-                yield break;
+                Debug.Log("ok");
             }
-
-            yield return null;
         }
+        
     }
+    void LookLeft()
+    {
+        Sr.flipX = true;
+        IdlelookCount += 1;
+    }
+
+    void LookRight()
+    {
+        Sr.flipX = false;
+        IdlelookCount += 1;
+    }
+
+    void LeftRun()
+    {
+        Debug.Log("왼쪽으로 걷고 있어요");
+    }
+
+    void RightRun()
+    {
+        Debug.Log("오른쪽으로 걷고 있어요"); 
+    }
+    #endregion
 }

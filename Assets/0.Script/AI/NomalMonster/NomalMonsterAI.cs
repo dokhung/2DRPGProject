@@ -93,7 +93,6 @@ public class NomalMonsterAI : Monster
                 Debug.Log("ok");
             }
         }
-        
     }
     void LookLeft()
     {
